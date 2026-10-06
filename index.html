@@ -7,9 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #f59e0b; /* Строительный желто-оранжевый */
+      --primary: #f59e0b;
       --primary-hover: #d97706;
-      --dark: #1e293b; /* Глубокий темно-синий */
+      --dark: #1e293b;
       --darker: #0f172a;
       --light: #f8fafc;
       --text: #334155;
@@ -110,7 +110,7 @@
         <a href="#contacts">Контакты</a>
       </nav>
       <div class="header-contact">
-        <span class="phone">+7 (999) 000-00-00</span>
+        <span class="phone">+7 499 409 05 64</span>
         <a href="#contacts" class="btn btn-primary">Оставить заявку</a>
       </div>
     </div>
@@ -200,7 +200,7 @@
           <div class="contact-icon">📞</div>
           <div>
             <div style="font-size: 14px; color: var(--gray);">Телефон</div>
-            <strong>+7 (999) 000-00-00</strong>
+            <strong>+7 499 409 05 64</strong>
           </div>
         </div>
         
@@ -208,7 +208,7 @@
           <div class="contact-icon">✉️</div>
           <div>
             <div style="font-size: 14px; color: var(--gray);">Email</div>
-            <strong>info@tehmet.ru</strong>
+            <strong>tmlab@mail.ru</strong>
           </div>
         </div>
         
@@ -222,8 +222,8 @@
       </div>
 
       <div class="contact-form">
-        <!-- Форма, которая перекидывает клиента в WhatsApp -->
-        <form onsubmit="sendToWhatsApp(event)">
+        <!-- Обычная форма обратной связи -->
+        <form onsubmit="event.preventDefault(); alert('Спасибо за заявку! Наш менеджер скоро свяжется с вами.'); this.reset();">
           <div class="form-group">
             <input type="text" id="clientName" class="form-control" placeholder="Ваше имя" required>
           </div>
@@ -233,7 +233,7 @@
           <div class="form-group">
             <textarea id="clientMessage" class="form-control" rows="4" placeholder="Кратко опишите ваш проект (какое здание нужно построить)"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 18px;">Отправить заявку в WhatsApp</button>
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 18px;">Отправить заявку</button>
         </form>
       </div>
     </div>
@@ -250,23 +250,6 @@
   </footer>
 
   <script>
-    // Скрипт для отправки данных формы напрямую вам в WhatsApp
-    function sendToWhatsApp(e) {
-      e.preventDefault();
-      
-      // ВПИШИТЕ СЮДА ВАШ НОМЕР ТЕЛЕФОНА (начиная с 7, без плюса и скобок)
-      const WA_NUMBER = "79990000000"; 
-      
-      const name = document.getElementById('clientName').value;
-      const phone = document.getElementById('clientPhone').value;
-      const msg = document.getElementById('clientMessage').value;
-      
-      const text = `Здравствуйте! Меня зовут ${name}.%0AМой телефон: ${phone}%0A%0AХочу обсудить проект:%0A${msg}`;
-      const url = `https://wa.me/${WA_NUMBER}?text=${text}`;
-      
-      window.open(url, '_blank');
-    }
-
     // Плавная прокрутка для меню
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
