@@ -1,698 +1,564 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#f0f9ff">
-    <title>Молодёжный Маркет</title>
-    
-    <!-- Ссылка на манифест будет сгенерирована динамически в JS -->
-    <link id="manifest-link" rel="manifest" href="">
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --sat: env(safe-area-inset-top);
-            --sab: env(safe-area-inset-bottom);
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nicemarket — Маркетплейс</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --radius: 12px;
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #e0f2fe; /* Фон за пределами телефона на ПК */
-            color: #0f172a;
-            /* Нативные свойства приложения */
-            -webkit-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            min-height: 100dvh;
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
 
-        /* Контейнер-эмулятор телефона для ПК */
-        #app-container {
-            width: 100%;
-            height: 100dvh;
-            background-color: #f0f9ff;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-        @media (min-width: 640px) {
-            #app-container {
-                max-width: 414px; /* iPhone Max width */
-                height: 850px;
-                max-height: 90vh;
-                border-radius: 40px;
-                box-shadow: 0 25px 50px -12px rgba(14, 165, 233, 0.25);
-                border: 8px solid #ffffff;
-            }
-        }
+    header {
+      background-color: var(--surface);
+      border-bottom: 1px solid var(--surface-border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-        /* Скрываем скроллбары для красоты */
-        ::-webkit-scrollbar { width: 0px; background: transparent; }
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        /* Анимации видов */
-        .view-section {
-            display: none;
-            flex-grow: 1;
-            overflow-y: auto;
-            padding-bottom: calc(80px + var(--sab));
-            padding-top: var(--sat);
-            animation: fadeSlideUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(15px);
-        }
-        .view-section.active {
-            display: block;
-        }
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #818cf8;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
 
-        @keyframes fadeSlideUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
+    .nav-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
 
-        /* Навигация (Bottom Bar) */
-        .bottom-nav {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(224, 242, 254, 0.8);
-            padding-bottom: var(--sab);
-            display: flex;
-            justify-content: space-around;
-            z-index: 50;
-        }
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 0;
-            color: #94a3b8;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-item.active {
-            color: #0ea5e9;
-        }
-        
-        .nav-item.active i {
-            transform: translateY(-2px);
-            filter: drop-shadow(0 4px 6px rgba(14, 165, 233, 0.3));
-        }
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
 
-        .nav-item i {
-            font-size: 1.25rem;
-            margin-bottom: 4px;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
 
-        .nav-item span {
-            font-size: 0.65rem;
-            font-weight: 600;
-        }
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text);
+      border: 1px solid var(--surface-border);
+    }
 
-        /* Карточки и ТОП */
-        .item-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px -5px rgba(14, 165, 233, 0.1);
-            border: 1px solid rgba(224, 242, 254, 0.6);
-            transform: translateZ(0); /* Аппаратное ускорение */
-        }
-        
-        .promoted-card {
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.4);
-        }
-        
-        .promoted-card::before {
-            content: "";
-            position: absolute;
-            inset: -2px;
-            border-radius: 22px;
-            background: linear-gradient(45deg, #38bdf8, #c084fc, #38bdf8);
-            background-size: 200% 200%;
-            animation: shimmer 3s linear infinite;
-            z-index: -1;
-        }
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
 
-        @keyframes shimmer {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+    .btn-danger {
+      background-color: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+    }
 
-        /* Уведомления */
-        #toast-container {
-            position: absolute;
-            bottom: calc(90px + var(--sab));
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 90%;
-            pointer-events: none;
-        }
-        .toast {
-            background: rgba(15, 23, 42, 0.9);
-            color: white;
-            backdrop-filter: blur(10px);
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            animation: slideUpFade 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-        .toast.error { border-left: 4px solid #ef4444; }
-        .toast.success { border-left: 4px solid #10b981; }
-        .toast.closing { opacity: 0; transform: translateY(10px); transition: all 0.3s; }
+    .btn-danger:hover {
+      background-color: rgba(239, 68, 68, 0.25);
+    }
 
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      flex: 1;
+      width: 100%;
+    }
 
-        /* Модальные окна */
-        .modal-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(5px);
-            z-index: 200;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-            padding: 20px;
-        }
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 340px;
-            border-radius: 28px;
-            transform: scale(0.95) translateY(20px);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            overflow: hidden;
-        }
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
-        }
+    .hero-banner {
+      background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
+      border: 1px solid #4338ca;
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      margin-bottom: 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
 
-        /* Лоадер */
-        .loader {
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top: 2px solid white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-    </style>
+    .hero-banner h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-banner p {
+      color: var(--text-muted);
+      max-width: 600px;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background-color: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #4f46e5;
+    }
+
+    .card-img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      background-color: #0b0f19;
+    }
+
+    .card-body {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-price {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #38bdf8;
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      line-height: 1.3;
+    }
+
+    .card-desc {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--surface-border);
+      padding-top: 0.75rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      padding: 1rem;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 480px;
+      padding: 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.4rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: var(--bg);
+      border: 1px solid var(--surface-border);
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .status-msg {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Firebase App & Services -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-    <div id="app-container">
-        
-        <!-- Header (App Bar) -->
-        <header class="pt-[calc(10px+var(--sat))] pb-3 px-6 bg-white/80 backdrop-blur-md sticky top-0 z-40 border-b border-sky-100 flex justify-between items-center">
-            <h1 class="font-bold text-xl text-slate-800 tracking-tight">Маркет<span class="text-sky-500">Плейс</span></h1>
-            <div id="user-avatar" class="w-9 h-9 rounded-full bg-sky-100 text-sky-500 flex items-center justify-center text-sm font-bold shadow-sm" onclick="handleAuthClick()">
-                <i class="fa-solid fa-user"></i>
-            </div>
-        </header>
-
-        <!-- Вкладка: Каталог -->
-        <main id="view-browse" class="view-section active px-4 pt-4">
-            <!-- Приветственный баннер -->
-            <div class="bg-gradient-to-br from-sky-400 to-blue-500 rounded-3xl p-6 mb-6 text-white shadow-lg shadow-sky-200/50 relative overflow-hidden">
-                <div class="relative z-10">
-                    <h2 class="text-2xl font-bold mb-1">Найди свой стиль</h2>
-                    <p class="text-sky-100 text-sm mb-4">Покупай и продавай легко!</p>
-                    <button onclick="switchView('add')" class="bg-white/20 backdrop-blur-md border border-white/30 text-white text-sm font-semibold py-2 px-4 rounded-xl active:scale-95 transition-transform">
-                        Разместить товар
-                    </button>
-                </div>
-                <div class="absolute -top-10 -right-10 w-32 h-32 rounded-full bg-white opacity-20 blur-xl"></div>
-            </div>
-
-            <div class="flex justify-between items-center mb-4 px-1">
-                <h3 class="text-lg font-bold text-slate-800">Свежее</h3>
-                <span class="text-xs font-semibold bg-sky-100 text-sky-600 px-2 py-1 rounded-lg" id="items-count-badge">0</span>
-            </div>
-            
-            <div id="items-grid" class="grid grid-cols-2 gap-4 pb-4">
-                <!-- Карточки будут здесь -->
-            </div>
-            
-            <div id="empty-state" class="hidden flex-col items-center justify-center py-12 text-center">
-                <div class="w-20 h-20 bg-sky-100 rounded-full flex items-center justify-center mb-4 text-sky-400">
-                    <i class="fa-solid fa-box-open text-3xl"></i>
-                </div>
-                <h3 class="font-semibold text-slate-700">Пусто</h3>
-                <p class="text-slate-400 text-sm mt-1">Станьте первым!</p>
-            </div>
-        </main>
-
-        <!-- Вкладка: Продать -->
-        <main id="view-add" class="view-section px-4 pt-4">
-            <h2 class="text-2xl font-bold text-slate-800 mb-6 px-1">Новое объявление</h2>
-            
-            <form id="add-item-form" class="space-y-5 bg-white p-5 rounded-3xl shadow-sm border border-sky-50">
-                <!-- Загрузка фото -->
-                <div>
-                    <div class="flex justify-center items-center w-full h-40 bg-sky-50 rounded-2xl border-2 border-dashed border-sky-200 relative overflow-hidden active:bg-sky-100 transition-colors">
-                        <div class="text-center" id="upload-prompt">
-                            <i class="fa-solid fa-camera text-3xl text-sky-400 mb-2"></i>
-                            <span class="block text-sm font-medium text-sky-600">Добавить фото</span>
-                        </div>
-                        <input id="item-image-file" type="file" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-                        
-                        <div id="image-preview-container" class="hidden absolute inset-0 bg-white">
-                            <img id="image-preview" src="" class="w-full h-full object-cover">
-                            <button type="button" id="remove-image-btn" class="absolute top-2 right-2 bg-slate-900/50 backdrop-blur-md text-white rounded-full w-8 h-8 flex items-center justify-center active:scale-95 z-10">
-                                <i class="fa-solid fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Название</label>
-                    <input type="text" id="item-title" placeholder="Что продаете?" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:border-sky-400 focus:bg-white outline-none transition-all text-sm font-medium">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Цена (₽)</label>
-                    <input type="number" id="item-price" pattern="[0-9]*" placeholder="0" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:border-sky-400 focus:bg-white outline-none transition-all text-sm font-medium font-mono">
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-1">Описание</label>
-                    <textarea id="item-desc" rows="3" placeholder="Состояние, размер..." class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:border-sky-400 focus:bg-white outline-none transition-all text-sm font-medium resize-none"></textarea>
-                </div>
-                
-                <button type="button" id="submit-item-btn" class="w-full py-3.5 bg-gradient-to-r from-sky-400 to-sky-500 text-white font-bold rounded-xl active:scale-95 transition-transform flex justify-center items-center shadow-lg shadow-sky-200/50">
-                    Опубликовать
-                </button>
-            </form>
-        </main>
-
-        <!-- Вкладка: Управление (Админ) -->
-        <main id="view-admin" class="view-section px-4 pt-4">
-            <h2 class="text-2xl font-bold text-slate-800 mb-6 px-1">Управление</h2>
-            
-            <div class="bg-white rounded-3xl shadow-sm border border-sky-50 overflow-hidden">
-                <div id="admin-list" class="divide-y divide-slate-50">
-                    <!-- Список для админа -->
-                </div>
-                <div id="admin-empty-state" class="hidden py-10 text-center">
-                    <p class="text-slate-400 text-sm font-medium">Нет активных объявлений</p>
-                </div>
-            </div>
-        </main>
-
-        <!-- Bottom Navigation Bar -->
-        <nav class="bottom-nav pb-[var(--sab)] shadow-[0_-10px_20px_rgba(0,0,0,0.03)]">
-            <button class="nav-item active" data-target="browse" onclick="switchView('browse')">
-                <i class="fa-solid fa-layer-group"></i>
-                <span>Каталог</span>
-            </button>
-            <button class="nav-item" data-target="add" onclick="switchView('add')">
-                <div class="w-12 h-12 bg-sky-500 rounded-full flex items-center justify-center text-white shadow-lg shadow-sky-200/50 -mt-5 mb-1 active:scale-95 transition-transform border-4 border-white">
-                    <i class="fa-solid fa-plus m-0 text-xl filter-none"></i>
-                </div>
-                <span>Продать</span>
-            </button>
-            <button class="nav-item" data-target="admin" onclick="switchView('admin')">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Управление</span>
-            </button>
-        </nav>
-
-        <!-- Toasts -->
-        <div id="toast-container"></div>
-
-        <!-- Auth Modal -->
-        <div id="auth-modal" class="modal-overlay">
-            <div class="modal-content relative p-6">
-                <button onclick="closeModal('auth-modal')" class="absolute top-4 right-4 w-8 h-8 flex justify-center items-center bg-slate-50 rounded-full text-slate-400 active:bg-slate-100">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <div class="text-center mb-6">
-                    <div class="w-14 h-14 bg-sky-100 text-sky-500 rounded-full mx-auto flex items-center justify-center text-2xl mb-3"><i class="fa-solid fa-envelope"></i></div>
-                    <h3 class="text-xl font-bold text-slate-800" id="auth-title">Вход</h3>
-                    <p class="text-sm text-slate-500">Войдите, чтобы продавать</p>
-                </div>
-                <form id="auth-form" class="space-y-4">
-                    <input type="email" id="auth-email" placeholder="Email" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:border-sky-400 outline-none text-sm">
-                    <input type="password" id="auth-password" placeholder="Пароль" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 focus:border-sky-400 outline-none text-sm">
-                    <button type="button" id="auth-submit-btn" class="w-full py-3 bg-sky-500 text-white font-bold rounded-xl active:scale-95 flex justify-center items-center">Войти / Создать</button>
-                </form>
-            </div>
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">🛍️ Nicemarket</a>
+      <div class="nav-actions">
+        <!-- Блок гостя -->
+        <div id="authGuest" class="nav-actions">
+          <button class="btn btn-secondary" onclick="openModal('authModal')">Войти</button>
         </div>
-
-        <!-- Admin Auth Modal -->
-        <div id="admin-auth-modal" class="modal-overlay">
-            <div class="modal-content relative p-6 text-center">
-                <button onclick="closeModal('admin-auth-modal')" class="absolute top-4 right-4 w-8 h-8 bg-slate-50 rounded-full text-slate-400">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-                <div class="w-14 h-14 bg-slate-100 text-slate-500 rounded-full mx-auto flex items-center justify-center text-2xl mb-3"><i class="fa-solid fa-lock"></i></div>
-                <h3 class="text-xl font-bold text-slate-800 mb-4">Доступ закрыт</h3>
-                <input type="password" id="admin-password" placeholder="Пароль" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 outline-none mb-4 text-center tracking-widest text-lg">
-                <button type="button" id="admin-login-btn" class="w-full py-3 bg-slate-800 text-white font-bold rounded-xl active:scale-95">Разблокировать</button>
-            </div>
+        <!-- Блок авторизованного пользователя -->
+        <div id="authUser" class="nav-actions hidden">
+          <span id="userEmailBadge" style="font-size: 0.85rem; color: var(--text-muted);"></span>
+          <button class="btn btn-primary" onclick="openModal('createPostModal')">+ Подать объявление</button>
+          <button class="btn btn-danger" onclick="logoutUser()">Выйти</button>
         </div>
+      </div>
+    </div>
+  </header>
 
-        <!-- Promo Modal -->
-        <div id="promo-modal" class="modal-overlay">
-            <div class="modal-content overflow-hidden">
-                <div class="bg-gradient-to-r from-fuchsia-500 to-sky-500 p-6 text-white text-center pt-8">
-                    <i class="fa-solid fa-rocket text-5xl mb-4 drop-shadow-md"></i>
-                    <h3 class="text-2xl font-bold">Опубликовано!</h3>
-                </div>
-                <div class="p-6 text-center bg-white">
-                    <p class="text-slate-500 mb-6 text-sm">Сделайте товар заметнее! <br>Продвижение в <b>ТОП</b> стоит всего 10 ₽.</p>
-                    <button onclick="acceptPromo()" class="w-full py-3.5 bg-sky-500 text-white font-bold rounded-xl mb-3 shadow-lg shadow-sky-200/50 active:scale-95">Продвинуть за 10 ₽</button>
-                    <button onclick="closeModal('promo-modal'); switchView('browse')" class="w-full py-3 bg-slate-50 text-slate-500 font-semibold rounded-xl active:bg-slate-100">Позже</button>
-                </div>
-            </div>
+  <main>
+    <div class="hero-banner">
+      <div>
+        <h1>Маркетплейс объявлений</h1>
+        <p>Покупайте и продавайте товары быстро и безопасно прямо через интернет.</p>
+      </div>
+      <div>
+        <button id="heroActionBtn" class="btn btn-primary" onclick="handleHeroBtnClick()">Подать объявление</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">Свежие объявления</h2>
+    <div id="itemsGrid" class="grid">
+      <!-- Сюда подгружаются объявления из Firebase -->
+      <div style="color: var(--text-muted);">Загрузка объявлений...</div>
+    </div>
+  </main>
+
+  <!-- Модальное окно Входа / Регистрации -->
+  <div id="authModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="authModalTitle">Вход в аккаунт</h3>
+        <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
+      </div>
+      <form onsubmit="handleAuth(event)">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="authEmail" required placeholder="user@example.com">
         </div>
-
-        <!-- Payment Modal -->
-        <div id="payment-modal" class="modal-overlay">
-            <div class="modal-content p-6">
-                <h3 class="text-xl font-bold text-center mb-6 text-slate-800">Оплата</h3>
-                <div class="space-y-4">
-                    <input type="tel" placeholder="0000 0000 0000 0000" class="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 font-mono text-sm outline-none">
-                    <div class="flex gap-4">
-                        <input type="tel" placeholder="ММ/ГГ" class="w-1/2 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 font-mono text-sm outline-none text-center">
-                        <input type="tel" placeholder="CVC" class="w-1/2 px-4 py-3 rounded-xl bg-slate-50 border border-slate-100 font-mono text-sm outline-none text-center" style="-webkit-text-security: disc;">
-                    </div>
-                    <button type="button" id="pay-btn" class="w-full mt-2 py-3.5 bg-emerald-500 text-white font-bold rounded-xl active:scale-95 shadow-lg shadow-emerald-200/50 flex justify-center items-center">Оплатить 10 ₽</button>
-                </div>
-            </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" id="authPassword" required placeholder="Минимум 6 символов">
         </div>
+        <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width: 100%;">Войти</button>
+      </form>
+      <div style="margin-top: 1rem; text-align: center; font-size: 0.85rem;">
+        <span id="authSwitchText">Нет аккаунта?</span> 
+        <a href="#" id="authSwitchLink" style="color: #818cf8;" onclick="toggleAuthMode(event)">Зарегистрироваться</a>
+      </div>
+      <div id="authStatus" class="status-msg"></div>
+    </div>
+  </div>
 
-    </div> <!-- End App Container -->
+  <!-- Модальное окно добавления объявления -->
+  <div id="createPostModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Новое объявление</h3>
+        <button class="close-btn" onclick="closeModal('createPostModal')">&times;</button>
+      </div>
+      <form onsubmit="handleCreatePost(event)">
+        <div class="form-group">
+          <label>Название товара</label>
+          <input type="text" id="postTitle" required placeholder="Например, iPhone 13 128GB">
+        </div>
+        <div class="form-group">
+          <label>Цена (₽)</label>
+          <input type="number" id="postPrice" required placeholder="Например, 45000">
+        </div>
+        <div class="form-group">
+          <label>Ссылка на фото (URL)</label>
+          <input type="url" id="postImage" placeholder="https://example.com/photo.jpg">
+        </div>
+        <div class="form-group">
+          <label>Описание</label>
+          <textarea id="postDesc" rows="3" required placeholder="Опишите состояние и детали..."></textarea>
+        </div>
+        <button type="submit" id="postSubmitBtn" class="btn btn-primary" style="width: 100%;">Опубликовать</button>
+      </form>
+      <div id="postStatus" class="status-msg"></div>
+    </div>
+  </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+  <script>
+    // 1. Инициализация Firebase с вашими ключами
+    const firebaseConfig = {
+      apiKey: "AIzaSyBiW1GNyhjJiuEJapEP0Qx06_PrfbmEBTc",
+      authDomain: "nicemarket-d77d0.firebaseapp.com",
+      projectId: "nicemarket-d77d0",
+      storageBucket: "nicemarket-d77d0.firebasestorage.app",
+      messagingSenderId: "848367524440",
+      appId: "1:848367524440:web:096d45aaf48a48f75c882d",
+      measurementId: "G-CWB5EQWNZH"
+    };
 
-        // ==========================================
-        // PWA Setup (Manifest & Service Worker Inline)
-        // ==========================================
-        const svgLogo = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#0ea5e9"/><path d="M156 200h200v200H156z" fill="#fff" opacity="0.2"/><path d="M256 120c-35 0-64 29-64 64h128c0-35-29-64-64-64z" fill="#fff"/><rect x="136" y="184" width="240" height="208" rx="24" fill="#fff"/><circle cx="256" cy="280" r="32" fill="#0ea5e9"/></svg>`;
-        const encodedIcon = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgLogo)));
-        
-        // Add Apple Touch Icon
-        const appleIcon = document.createElement('link'); appleIcon.rel = 'apple-touch-icon'; appleIcon.href = encodedIcon; document.head.appendChild(appleIcon);
-        
-        // Create Manifest
-        const manifestStr = JSON.stringify({
-            name: "Молодёжный Маркетплейс", short_name: "Маркет", start_url: ".", display: "standalone",
-            background_color: "#f0f9ff", theme_color: "#ffffff",
-            icons: [{ src: encodedIcon, sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }]
-        });
-        document.getElementById('manifest-link').href = URL.createObjectURL(new Blob([manifestStr], {type: 'application/json'}));
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-        // Register Service Worker
-        const swCode = `self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => self.clients.claim()); self.addEventListener('fetch', e => {});`;
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(URL.createObjectURL(new Blob([swCode], {type: 'application/javascript'}))).catch(()=>{});
+    let currentUser = null;
+    let isRegisterMode = false;
+
+    // 2. Отслеживание авторизации
+    auth.onAuthStateChanged((user) => {
+      currentUser = user;
+      const guestBlock = document.getElementById('authGuest');
+      const userBlock = document.getElementById('authUser');
+      const userBadge = document.getElementById('userEmailBadge');
+
+      if (user) {
+        guestBlock.classList.add('hidden');
+        userBlock.classList.remove('hidden');
+        userBadge.textContent = user.email;
+      } else {
+        guestBlock.classList.remove('hidden');
+        userBlock.classList.add('hidden');
+      }
+    });
+
+    // 3. Авторизация и Регистрация
+    async function handleAuth(e) {
+      e.preventDefault();
+      const email = document.getElementById('authEmail').value;
+      const pass = document.getElementById('authPassword').value;
+      const status = document.getElementById('authStatus');
+
+      status.textContent = 'Обработка...';
+      status.style.color = '#38bdf8';
+
+      try {
+        if (isRegisterMode) {
+          await auth.createUserWithEmailAndPassword(email, pass);
+        } else {
+          await auth.signInWithEmailAndPassword(email, pass);
         }
+        status.textContent = '';
+        closeModal('authModal');
+      } catch (err) {
+        status.style.color = 'var(--danger)';
+        status.textContent = err.message;
+      }
+    }
 
-        // ==========================================
-        // App State & Firebase Setup
-        // ==========================================
-        const state = {
-            user: null, items: [], isAdminAuth: false, isAuth: false, pendingId: null
-        };
+    function toggleAuthMode(e) {
+      e.preventDefault();
+      isRegisterMode = !isRegisterMode;
+      document.getElementById('authModalTitle').textContent = isRegisterMode ? 'Создать аккаунт' : 'Вход в аккаунт';
+      document.getElementById('authSubmitBtn').textContent = isRegisterMode ? 'Зарегистрироваться' : 'Войти';
+      document.getElementById('authSwitchText').textContent = isRegisterMode ? 'Уже есть аккаунт?' : 'Нет аккаунта?';
+      document.getElementById('authSwitchLink').textContent = isRegisterMode ? 'Войти' : 'Зарегистрироваться';
+    }
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'mobile-pwa-market';
-        const fallbackConfig = { projectId: "demo-project", appId: "demo-app" };
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : fallbackConfig;
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const itemsRef = collection(db, 'artifacts', appId, 'public', 'data', 'market_items');
+    async function logoutUser() {
+      await auth.signOut();
+    }
 
-        // UI Helpers
-        window.showToast = (msg, type = 'success') => {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div'); toast.className = `toast ${type}`;
-            const icon = type === 'success' ? '<i class="fa-solid fa-check-circle text-emerald-400"></i>' : '<i class="fa-solid fa-circle-exclamation text-red-400"></i>';
-            toast.innerHTML = `${icon} <span>${msg}</span>`;
-            container.appendChild(toast);
-            setTimeout(() => { toast.classList.add('closing'); setTimeout(() => toast.remove(), 300); }, 2500);
-        };
+    // 4. Публикация объявлений
+    async function handleCreatePost(e) {
+      e.preventDefault();
+      if (!currentUser) return;
 
-        window.closeModal = (id) => document.getElementById(id).classList.remove('active');
-        const openModal = (id) => document.getElementById(id).classList.add('active');
+      const title = document.getElementById('postTitle').value;
+      const price = Number(document.getElementById('postPrice').value);
+      let img = document.getElementById('postImage').value;
+      const desc = document.getElementById('postDesc').value;
+      const status = document.getElementById('postStatus');
 
-        // Navigation
-        window.switchView = (viewId) => {
-            if (viewId === 'admin' && !state.isAdminAuth) { openModal('admin-auth-modal'); return; }
-            if (viewId === 'add' && !state.isAuth) { openModal('auth-modal'); showToast("Сначала войдите", "error"); return; }
-            
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            
-            document.querySelectorAll('.nav-item').forEach(el => {
-                if(el.dataset.target === viewId) el.classList.add('active');
-                else el.classList.remove('active');
-            });
-            
-            if (viewId === 'browse') renderBrowse();
-            if (viewId === 'admin') renderAdmin();
-        };
+      if (!img) {
+        img = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop';
+      }
 
-        // Auth Flow
-        window.handleAuthClick = () => {
-            if (state.isAuth) {
-                if(confirm("Выйти из аккаунта?")) {
-                    signOut(auth); state.isAuth = false; switchView('browse'); showToast("Вы вышли");
-                }
-            } else openModal('auth-modal');
-        };
+      status.textContent = 'Публикация...';
+      status.style.color = '#38bdf8';
 
-        document.getElementById('auth-submit-btn').addEventListener('click', async () => {
-            const email = document.getElementById('auth-email').value, pwd = document.getElementById('auth-password').value;
-            if(!email || !pwd) return showToast("Заполните данные", "error");
-            
-            const btn = document.getElementById('auth-submit-btn'); const orig = btn.innerHTML;
-            btn.innerHTML = '<div class="loader"></div>'; btn.disabled = true;
-            
-            try {
-                // Пытаемся войти, если нет - создаем
-                try { await signInWithEmailAndPassword(auth, email, pwd); } 
-                catch(e) { 
-                    if(e.code === 'auth/user-not-found' || e.code === 'auth/invalid-credential') {
-                        await createUserWithEmailAndPassword(auth, email, pwd);
-                    } else throw e;
-                }
-                closeModal('auth-modal'); showToast("Успешный вход");
-                if(!state.isAuth && state.pendingView === 'add') switchView('add'); // go to add if they were blocked
-            } catch(e) { 
-                showToast("Ошибка входа: " + (e.code === 'auth/weak-password' ? 'слабый пароль' : 'неверные данные'), "error"); 
-            } finally { 
-                btn.innerHTML = orig; btn.disabled = false; 
-            }
+      try {
+        await db.collection('products').add({
+          title: title,
+          price: price,
+          image: img,
+          description: desc,
+          sellerEmail: currentUser.email,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
+        status.textContent = '';
+        document.getElementById('createPostModal').querySelector('form').reset();
+        closeModal('createPostModal');
+      } catch (err) {
+        status.style.color = 'var(--danger)';
+        status.textContent = err.message;
+      }
+    }
 
-        onAuthStateChanged(auth, (user) => {
-            state.user = user;
-            if (user && !user.isAnonymous && user.email) {
-                state.isAuth = true;
-                document.getElementById('user-avatar').innerHTML = user.email.substring(0,2).toUpperCase();
-                document.getElementById('user-avatar').classList.replace('bg-sky-100', 'bg-sky-500');
-                document.getElementById('user-avatar').classList.replace('text-sky-500', 'text-white');
-            } else {
-                state.isAuth = false;
-                document.getElementById('user-avatar').innerHTML = '<i class="fa-solid fa-user"></i>';
-                document.getElementById('user-avatar').classList.replace('bg-sky-500', 'bg-sky-100');
-                document.getElementById('user-avatar').classList.replace('text-white', 'text-sky-500');
-            }
-            
-            onSnapshot(itemsRef, (snap) => {
-                state.items = snap.docs.map(d => ({id: d.id, ...d.data()})).sort((a, b) => {
-                    if (a.isPromoted && !b.isPromoted) return -1;
-                    if (!a.isPromoted && b.isPromoted) return 1;
-                    return (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0);
-                });
-                renderBrowse(); if(document.getElementById('view-admin').classList.contains('active')) renderAdmin();
-            }, (err) => console.log(err));
-        });
+    // 5. Загрузка товаров из Firestore в реальном времени
+    db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+      const grid = document.getElementById('itemsGrid');
+      grid.innerHTML = '';
 
-        // Admin Login
-        document.getElementById('admin-login-btn').addEventListener('click', () => {
-            if (document.getElementById('admin-password').value === 'Corola20') {
-                state.isAdminAuth = true; closeModal('admin-auth-modal'); switchView('admin');
-                document.getElementById('admin-password').value = '';
-            } else showToast("Неверный пароль", "error");
-        });
+      if (snapshot.empty) {
+        grid.innerHTML = '<div style="color: var(--text-muted); grid-column: 1 / -1;">Пока нет объявлений. Будьте первым!</div>';
+        return;
+      }
 
-        // Image Handling
-        const fileInput = document.getElementById('item-image-file');
-        const imgCont = document.getElementById('image-preview-container');
-        const imgPrev = document.getElementById('image-preview');
+      snapshot.forEach((doc) => {
+        const item = doc.data();
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <img class="card-img" src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop'">
+          <div class="card-body">
+            <div class="card-price">${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : 'Договорная'}</div>
+            <div class="card-title">${escapeHtml(item.title)}</div>
+            <div class="card-desc">${escapeHtml(item.description)}</div>
+            <div class="card-footer">
+              <span>👤 ${escapeHtml(item.sellerEmail ? item.sellerEmail.split('@')[0] : 'Продавец')}</span>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }, (error) => {
+      document.getElementById('itemsGrid').innerHTML = '<div style="color: var(--danger);">Ошибка при загрузке: ' + error.message + '</div>';
+    });
 
-        fileInput.addEventListener('change', (e) => {
-            const f = e.target.files[0];
-            if (f) {
-                const r = new FileReader();
-                r.onload = ev => { imgPrev.src = ev.target.result; imgCont.classList.remove('hidden'); };
-                r.readAsDataURL(f);
-            }
-        });
-        document.getElementById('remove-image-btn').addEventListener('click', (e) => {
-            e.stopPropagation(); fileInput.value = ''; imgCont.classList.add('hidden'); imgPrev.src = '';
-        });
+    // 6. Утилиты интерфейса
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
 
-        function compressImage(file, max = 800) {
-            return new Promise((res) => {
-                const r = new FileReader(); r.readAsDataURL(file);
-                r.onload = ev => {
-                    const img = new Image(); img.src = ev.target.result;
-                    img.onload = () => {
-                        let w = img.width, h = img.height;
-                        if (w > max || h > max) { if (w > h) { h = Math.round(h*max/w); w = max; } else { w = Math.round(w*max/h); h = max; } }
-                        const cvs = document.createElement('canvas'); cvs.width = w; cvs.height = h;
-                        cvs.getContext('2d').drawImage(img, 0, 0, w, h);
-                        res(cvs.toDataURL('image/jpeg', 0.8));
-                    };
-                };
-            });
-        }
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
 
-        // Post Item
-        document.getElementById('submit-item-btn').addEventListener('click', async () => {
-            const t = document.getElementById('item-title').value, p = document.getElementById('item-price').value, d = document.getElementById('item-desc').value;
-            const f = fileInput.files[0];
-            if(!t || !p || !d) return showToast("Заполните все поля", "error");
+    function handleHeroBtnClick() {
+      if (currentUser) {
+        openModal('createPostModal');
+      } else {
+        openModal('authModal');
+      }
+    }
 
-            const btn = document.getElementById('submit-item-btn'); const orig = btn.innerHTML;
-            btn.innerHTML = '<div class="loader"></div>'; btn.disabled = true;
-
-            try {
-                let imgUrl = f ? await compressImage(f) : `https://placehold.co/400x400/e0f2fe/0ea5e9?text=${encodeURIComponent(t.substring(0,6))}`;
-                const ref = await addDoc(itemsRef, {
-                    title: t, price: parseFloat(p), description: d, imageUrl: imgUrl,
-                    sellerEmail: state.user?.email || 'Скрыто', isPromoted: false, createdAt: serverTimestamp()
-                });
-                
-                document.getElementById('add-item-form').reset();
-                document.getElementById('remove-image-btn').click();
-                
-                state.pendingId = ref.id;
-                openModal('promo-modal');
-            } catch(e) { showToast("Ошибка", "error"); } 
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
-
-        // Rendering
-        function renderBrowse() {
-            document.getElementById('items-count-badge').textContent = state.items.length;
-            const grid = document.getElementById('items-grid');
-            if(!state.items.length) { grid.innerHTML = ''; document.getElementById('empty-state').classList.remove('hidden'); document.getElementById('empty-state').classList.add('flex'); return; }
-            document.getElementById('empty-state').classList.add('hidden'); document.getElementById('empty-state').classList.remove('flex');
-            
-            grid.innerHTML = state.items.map(it => `
-                <div class="item-card flex flex-col ${it.isPromoted ? 'promoted-card' : ''}">
-                    <div class="relative aspect-square bg-slate-50">
-                        ${it.isPromoted ? '<div class="absolute top-2 left-2 bg-sky-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full z-10 shadow-md">ТОП</div>' : ''}
-                        <img src="${it.imageUrl}" class="w-full h-full object-cover" loading="lazy">
-                    </div>
-                    <div class="p-3 flex flex-col flex-grow">
-                        <div class="font-bold text-sky-500 text-sm mb-1">${it.price} ₽</div>
-                        <div class="font-semibold text-slate-800 text-xs line-clamp-2 leading-tight mb-2 flex-grow">${it.title}</div>
-                        <div class="text-[10px] text-slate-400 truncate mt-auto"><i class="fa-solid fa-envelope mr-1 opacity-50"></i>${it.sellerEmail.split('@')[0]}</div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function renderAdmin() {
-            const list = document.getElementById('admin-list');
-            if(!state.items.length) { list.innerHTML = ''; document.getElementById('admin-empty-state').classList.remove('hidden'); return; }
-            document.getElementById('admin-empty-state').classList.add('hidden');
-            
-            list.innerHTML = state.items.map(it => `
-                <div class="p-4 flex items-center justify-between gap-3 bg-white">
-                    <img src="${it.imageUrl}" class="w-12 h-12 rounded-xl object-cover bg-slate-50 flex-shrink-0">
-                    <div class="flex-grow min-w-0">
-                        <h4 class="font-semibold text-sm text-slate-800 truncate">${it.title}</h4>
-                        <div class="text-sky-500 text-xs font-bold">${it.price} ₽ ${it.isPromoted ? '<span class="ml-1 text-fuchsia-500">(ТОП)</span>' : ''}</div>
-                    </div>
-                    <button onclick="deleteItem('${it.id}')" class="w-10 h-10 rounded-full bg-red-50 text-red-500 flex justify-center items-center active:bg-red-100 flex-shrink-0">
-                        <i class="fa-solid fa-trash text-sm"></i>
-                    </button>
-                </div>
-            `).join('');
-        }
-
-        // Actions
-        window.deleteItem = async (id) => {
-            if(confirm("Удалить объявление?")) {
-                try { await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'market_items', id)); showToast("Удалено"); } 
-                catch(e) { showToast("Ошибка", "error"); }
-            }
-        };
-
-        window.acceptPromo = () => { closeModal('promo-modal'); openModal('payment-modal'); };
-        
-        document.getElementById('pay-btn').addEventListener('click', async () => {
-            const btn = document.getElementById('pay-btn'); const orig = btn.innerHTML;
-            btn.innerHTML = '<div class="loader border-t-white"></div>'; btn.disabled = true;
-            try {
-                await new Promise(r => setTimeout(r, 1000));
-                await updateDoc(doc(db, 'artifacts', appId, 'public', 'data', 'market_items', state.pendingId), { isPromoted: true });
-                showToast("Товар в ТОПе!"); closeModal('payment-modal'); switchView('browse');
-            } catch(e) { showToast("Сбой", "error"); } 
-            finally { btn.innerHTML = orig; btn.disabled = false; }
-        });
-
-        // Initialization auth logic
-        const initToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        if(initToken && !auth.currentUser) signInWithCustomToken(auth, initToken).catch(()=>{});
-        else if(!auth.currentUser) signInAnonymously(auth).catch(()=>{});
-
-    </script>
+    function escapeHtml(string) {
+      if (!string) return '';
+      return String(string)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
 </body>
 </html>
