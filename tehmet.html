@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ООО «Техмет» — Строительство зданий и сооружений</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-hover: #d97706;
+      --dark: #1e293b;
+      --darker: #0f172a;
+      --light: #f8fafc;
+      --text: #334155;
+      --gray: #64748b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+    body { color: var(--text); background-color: var(--light); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
+
+    header { background-color: var(--darker); color: white; position: fixed; width: 100%; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; }
+    .logo span { color: var(--primary); }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a { font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+    .header-contact { display: flex; align-items: center; gap: 15px; }
+    .phone { font-weight: 700; font-size: 18px; }
+
+    .btn { padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.3s; border: none; text-align: center; display: inline-block; }
+    .btn-primary { background-color: var(--primary); color: var(--darker); }
+    .btn-primary:hover { background-color: var(--primary-hover); color: white; }
+    .btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
+    .btn-outline:hover { background-color: var(--primary); color: var(--darker); }
+
+    .hero { margin-top: 70px; background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1541888086425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80') center/cover; color: white; padding: 120px 20px; text-align: center; }
+    .hero-content { max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+    .hero p { font-size: 20px; color: #cbd5e1; margin-bottom: 40px; }
+    .hero-buttons { display: flex; gap: 20px; justify-content: center; }
+
+    section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .section-title { text-align: center; font-size: 36px; font-weight: 800; color: var(--dark); margin-bottom: 50px; position: relative; }
+    .section-title::after { content: ''; width: 80px; height: 4px; background-color: var(--primary); display: block; margin: 15px auto 0; border-radius: 2px; }
+
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    .about-text h3 { font-size: 24px; margin-bottom: 20px; color: var(--dark); }
+    .about-text p { margin-bottom: 15px; font-size: 16px; color: var(--gray); }
+    .stats { display: flex; gap: 30px; margin-top: 30px; }
+    .stat-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; text-align: center; border-bottom: 4px solid var(--primary); }
+    .stat-num { font-size: 36px; font-weight: 800; color: var(--dark); }
+    .stat-desc { font-size: 14px; color: var(--gray); font-weight: 600; text-transform: uppercase; }
+
+    .services { background-color: #f1f5f9; max-width: 100%; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    .service-card { background: white; padding: 40px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .service-card:hover { transform: translateY(-10px); }
+    .service-icon { font-size: 40px; margin-bottom: 20px; }
+    .service-card h3 { font-size: 20px; color: var(--dark); margin-bottom: 15px; }
+    .service-card p { color: var(--gray); font-size: 15px; }
+
+    .contact-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 40px; }
+    .contact-info h3 { font-size: 28px; margin-bottom: 20px; color: var(--dark); }
+    .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 18px; }
+    .contact-icon { background: var(--light); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 20px; color: var(--primary); }
+
+    .form-group { margin-bottom: 20px; }
+    .form-control { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; font-family: inherit; }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+
+    footer { background-color: var(--darker); color: #cbd5e1; padding: 40px 20px; text-align: center; }
+    footer p { margin-top: 20px; font-size: 14px; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 32px; }
+      .hero-buttons { flex-direction: column; }
+      .about-grid { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; }
+      .contact-section { grid-template-columns: 1fr; padding: 30px 20px; }
+      .header-contact .btn { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
+        О-ТЕХМЕТ
+      </a>
+      <nav class="nav-links">
+        <a href="#about">О компании</a>
+        <a href="#services">Услуги</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="header-contact">
+        <span class="phone">+7 499 409 05 64</span>
+        <a href="#contacts" class="btn btn-primary">Оставить заявку</a>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Профессиональное строительство зданий и сооружений</h1>
+      <p>Компания «Техмет» — ваш надежный генподрядчик. Мы реализуем проекты любой сложности: от проектирования до сдачи объекта в эксплуатацию точно в срок.</p>
+      <div class="hero-buttons">
+        <a href="#contacts" class="btn btn-primary">Обсудить проект</a>
+        <a href="#services" class="btn btn-outline">Наши услуги</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 class="section-title">О компании «Техмет»</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>Строим на века. Сдаем вовремя.</h3>
+        <p>ООО «Техмет» работает на рынке строительных услуг уже <strong>несколько лет</strong>. За это время мы сформировали команду профессионалов, которым доверяют возведение коммерческих и промышленных объектов.</p>
+        <p>Мы берем на себя полный цикл работ. Соблюдение ГОСТов, СНиПов и техники безопасности — наше главное правило.</p>
+        <div class="stats">
+          <div class="stat-item"><div class="stat-num">5+</div><div class="stat-desc">Лет на рынке</div></div>
+          <div class="stat-item"><div class="stat-num">100%</div><div class="stat-desc">Сдача в срок</div></div>
+        </div>
+      </div>
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="Строительство" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+      </div>
+    </div>
+  </section>
+
+  <div class="services" id="services">
+    <section>
+      <h2 class="section-title">Что мы строим</h2>
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-icon">🏭</div>
+          <h3>Промышленные здания</h3>
+          <p>Возведение цехов, складов, ангаров и производственных комплексов. Работаем с тяжелыми металлоконструкциями и железобетоном.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🏢</div>
+          <h3>Коммерческая недвижимость</h3>
+          <p>Строительство торговых центров, офисных зданий, автосалонов и павильонов с современными фасадными решениями.</p>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🏗️️</div>
+          <h3>Металлоконструкции</h3>
+          <p>Изготовление и монтаж несущих металлокаркасов зданий, эстакад, навесов. Высокая скорость сборки и надежность.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section id="contacts">
+    <h2 class="section-title">Свяжитесь с нами</h2>
+    <div class="contact-section">
+      <div class="contact-info">
+        <h3>Готовы начать строительство?</h3>
+        <p style="color: var(--gray); margin-bottom: 30px;">Позвоните нам или оставьте заявку. Наши инженеры ответят на все вопросы и подготовят предварительную смету.</p>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div><div style="font-size: 14px; color: var(--gray);">Телефон</div><strong>+7 499 409 05 64</strong></div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div><div style="font-size: 14px; color: var(--gray);">Email</div><strong>tmlab@mail.ru</strong></div>
+        </div>
+      </div>
+
+      <div class="contact-form">
+        <form onsubmit="event.preventDefault(); alert('Спасибо за заявку! Наш менеджер скоро свяжется с вами.'); this.reset();">
+          <div class="form-group"><input type="text" id="clientName" class="form-control" placeholder="Ваше имя" required></div>
+          <div class="form-group"><input type="tel" id="clientPhone" class="form-control" placeholder="Номер телефона" required></div>
+          <div class="form-group"><textarea id="clientMessage" class="form-control" rows="4" placeholder="Кратко опишите ваш проект"></textarea></div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 18px;">Отправить заявку</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
+      ООО «ТЕХМЕТ»
+    </div>
+    <p>&copy; 2026 ООО «Техмет». Все права защищены.</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>
