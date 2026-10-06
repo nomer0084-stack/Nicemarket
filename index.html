@@ -2,70 +2,87 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nicemarket — Маркетплейс</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Nicemarket</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface-border: #334155;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #ef4444;
-      --success: #10b981;
-      --warning: #f59e0b;
-      --radius: 12px;
+      --bg: #0f0f11;
+      --surface: #1c1c1e;
+      --text: #ffffff;
+      --text-muted: #8e8e93;
+      --primary: #2ed573;
+      --danger: #ff4757;
+      --radius: 16px;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-    
-    header { background-color: var(--surface); border-bottom: 1px solid var(--surface-border); position: sticky; top: 0; z-index: 10; }
-    .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
-    .logo { font-size: 1.5rem; font-weight: 700; color: #818cf8; text-decoration: none; }
-    .nav-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
 
-    .btn { padding: 0.6rem 1.2rem; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; color: white; }
-    .btn-primary { background-color: var(--primary); }
-    .btn-secondary { background-color: transparent; border: 1px solid var(--surface-border); }
-    .btn-danger { background-color: rgba(239, 68, 68, 0.2); color: var(--danger); }
-    .btn-warning { background-color: rgba(245, 158, 11, 0.2); color: var(--warning); }
-    .btn-small { padding: 0.3rem 0.6rem; font-size: 0.75rem; border-radius: 6px; }
-
-    main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; flex: 1; width: 100%; }
-    .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    /* Верхняя часть (Поиск и Баннер) */
+    .top-header { padding: 16px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+    .search-bar-container { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
+    .search-bar { flex: 1; background: #ffffff; border-radius: 20px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; color: #000; }
+    .search-bar input { border: none; background: transparent; outline: none; width: 100%; font-size: 16px; }
+    .cart-btn { background: #ffffff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #000; border: none; font-size: 20px; }
     
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
-    .card { background-color: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; position: relative; }
-    .card-img { width: 100%; height: 200px; object-fit: cover; background-color: #0b0f19; }
-    .card-body { padding: 1rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
-    .card-price { font-size: 1.25rem; font-weight: 700; color: #38bdf8; }
-    .card-title { font-size: 1rem; font-weight: 600; line-height: 1.3; }
-    .card-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; flex: 1; }
-    .card-contacts { color: #818cf8; font-size: 0.85rem; font-weight: 500; margin-top: 0.5rem; }
-    .card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-top: 1px solid var(--surface-border); padding-top: 0.75rem; margin-top: 0.5rem; flex-wrap: wrap; gap: 0.5rem;}
-    
-    .pinned-badge { position: absolute; top: 10px; right: 10px; background: var(--warning); color: #000; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; font-weight: bold; }
+    .promo-banner { background: linear-gradient(90deg, #2ed573, #a29bfe); border-radius: 12px; padding: 16px; font-weight: 800; font-size: 18px; color: #000; display: flex; justify-content: space-between; align-items: center; }
 
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 1rem; visibility: hidden; opacity: 0; }
+    /* Категории (горизонтальный скролл) */
+    .categories { display: flex; overflow-x: auto; padding: 0 16px 16px 16px; gap: 10px; scrollbar-width: none; }
+    .categories::-webkit-scrollbar { display: none; }
+    .cat-item { min-width: 110px; height: 110px; background: var(--surface); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; justify-content: space-between; font-size: 13px; font-weight: 600; }
+    .cat-item.large { min-width: 150px; }
+    .cat-icon { font-size: 28px; align-self: flex-end; }
+
+    /* Сетка товаров */
+    .grid-container { padding: 0 16px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .card { background: transparent; display: flex; flex-direction: column; position: relative; }
+    .card-img-wrap { width: 100%; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; position: relative; background: var(--surface); }
+    .card-img { width: 100%; height: 100%; object-fit: cover; }
+    .pinned-badge { position: absolute; top: 8px; left: 8px; background: #f1c40f; color: #000; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; }
+    .card-fav { position: absolute; bottom: 8px; right: 8px; font-size: 20px; }
+    
+    .card-info { padding: 8px 4px; }
+    .card-price { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .card-title { font-size: 14px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; margin-bottom: 4px; }
+    .card-contacts { font-size: 12px; color: #a29bfe; margin-bottom: 4px; }
+    
+    /* Кнопки админа в карточке */
+    .admin-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .admin-btn { background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; }
+    .admin-btn.red { background: rgba(255, 71, 87, 0.2); color: #ff4757; }
+    .admin-btn.yellow { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+
+    /* Нижнее меню (Bottom Nav) */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
+    .nav-item { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; cursor: pointer; width: 20%; }
+    .nav-item.active { color: var(--text); }
+    .nav-icon { font-size: 24px; }
+
+    /* Модальные окна */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 200; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: all 0.3s; }
     .modal-overlay.active { visibility: visible; opacity: 1; }
-    .modal { background: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius); width: 100%; max-width: 500px; padding: 2rem; max-height: 90vh; overflow-y: auto; }
-    .modal-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
-    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+    .modal { background: #1c1c1e; width: 100%; border-radius: 24px 24px 0 0; padding: 24px 20px; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; }
+    .modal-overlay.active .modal { transform: translateY(0); }
     
-    .form-group { margin-bottom: 1.2rem; }
-    .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
-    .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border-radius: 8px; background: var(--bg); border: 1px solid var(--surface-border); color: var(--text); }
-    .hidden { display: none !important; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 18px; font-weight: 700; }
+    .close-btn { background: #333; border: none; color: white; width: 32px; height: 32px; border-radius: 16px; font-size: 16px; }
 
-    /* Таблица админки */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
+    .form-group input, .form-group textarea { width: 100%; padding: 14px; border-radius: 12px; background: #2c2c2e; border: 1px solid #3a3a3c; color: white; font-size: 16px; }
+    
+    .btn { width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; color: white; margin-bottom: 12px; }
+    .btn-primary { background: #3498db; }
+    .btn-success { background: var(--primary); color: #000; }
+    .btn-danger { background: var(--danger); }
+    .btn-warning { background: #f1c40f; color: #000; }
+
+    /* Админка список */
     .user-list { display: flex; flex-direction: column; gap: 10px; }
-    .user-item { background: var(--bg); padding: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--surface-border); }
-    .user-email { font-size: 0.9rem; font-weight: 500; }
-    .banned-text { color: var(--danger); font-size: 0.8rem; font-weight: bold; }
+    .user-item { background: #2c2c2e; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
   </style>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -73,81 +90,119 @@
 </head>
 <body>
 
-  <header>
-    <div class="nav-container">
-      <a href="#" class="logo">🛍 Nicemarket</a>
-      <div class="nav-actions">
-        <div id="authGuest"><button class="btn btn-secondary" onclick="openModal('authModal')">Войти</button></div>
-        <div id="authUser" class="hidden">
-          <span id="userEmailBadge" style="margin-right: 10px; font-size: 0.85rem;"></span>
-          <button id="adminPanelBtn" class="btn btn-warning hidden" onclick="openAdminPanel()">Панель Админа</button>
-          <button class="btn btn-primary" onclick="openPostModal()">+ Объявление</button>
-          <button class="btn btn-danger" onclick="logoutUser()">Выйти</button>
-        </div>
+  <div class="top-header">
+    <div class="search-bar-container">
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="Поиск в Москве и Мос...">
+        <span>🎛️</span>
       </div>
+      <button class="cart-btn">🛒</button>
     </div>
-  </header>
+    <div class="promo-banner">
+      Скидки каждый день <span>></span>
+    </div>
+  </div>
 
-  <main>
-    <h2 class="section-title">Все объявления</h2>
-    <div id="itemsGrid" class="grid"><div style="color: gray;">Загрузка...</div></div>
-  </main>
+  <div class="categories">
+    <div class="cat-item" style="background: #273c75;"><span>Все</span><span class="cat-icon">🟩</span></div>
+    <div class="cat-item large" style="background: #2d3436;"><span>Недвижимость</span><span class="cat-icon">🏠</span></div>
+    <div class="cat-item large" style="background: #1e272e;"><span>Работа и<br>подработка</span><span class="cat-icon">💼</span></div>
+    <div class="cat-item" style="background: #192a56;"><span>Авто</span><span class="cat-icon">🚙</span></div>
+    <div class="cat-item" style="background: #2f3640;"><span>Электроника</span><span class="cat-icon">📱</span></div>
+  </div>
 
-  <!-- Модалка Входа -->
+  <div class="grid-container">
+    <div id="itemsGrid" class="grid">
+      <div style="color: var(--text-muted); padding: 20px;">Загрузка объявлений...</div>
+    </div>
+  </div>
+
+  <!-- Нижнее меню -->
+  <nav class="bottom-nav">
+    <button class="nav-item active">
+      <span class="nav-icon">🔍</span><span>Поиск</span>
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">❤️</span><span>Избранное</span>
+    </button>
+    <button class="nav-item" onclick="handleAddClick()">
+      <span class="nav-icon" style="font-size: 28px; color: #2ed573;">⊕</span><span>Объявления</span>
+    </button>
+    <button class="nav-item">
+      <span class="nav-icon">💬</span><span>Сообщения</span>
+    </button>
+    <button class="nav-item" onclick="handleProfileClick()">
+      <span class="nav-icon">👤</span><span>Профиль</span>
+    </button>
+  </nav>
+
+  <!-- Модалка: Профиль (Меню) -->
+  <div id="profileMenuModal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span id="profileEmailTitle">Профиль</span>
+        <button class="close-btn" onclick="closeModal('profileMenuModal')">✕</button>
+      </div>
+      <button id="adminBtn" class="btn btn-warning" style="display: none;" onclick="openAdminPanel()">👑 Панель Администратора</button>
+      <button class="btn btn-danger" onclick="logoutUser()">Выйти из аккаунта</button>
+    </div>
+  </div>
+
+  <!-- Модалка: Вход / Регистрация -->
   <div id="authModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="authModalTitle">Вход</h3>
-        <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
+        <span id="authModalTitle">Вход в аккаунт</span>
+        <button class="close-btn" onclick="closeModal('authModal')">✕</button>
       </div>
       <form onsubmit="handleAuth(event)">
         <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
         <div class="form-group"><label>Пароль</label><input type="password" id="authPassword" required></div>
-        <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width: 100%;">Войти</button>
+        <button type="submit" id="authSubmitBtn" class="btn btn-primary">Войти</button>
       </form>
-      <div style="margin-top: 1rem; text-align: center;">
-        <a href="#" style="color: #818cf8;" onclick="toggleAuthMode(event)" id="authSwitchLink">Нет аккаунта? Зарегистрироваться</a>
+      <div style="text-align: center; margin-top: 10px;">
+        <span style="color: var(--text-muted); font-size: 14px;" onclick="toggleAuthMode(event)" id="authSwitchLink">Нет аккаунта? Зарегистрироваться</span>
       </div>
     </div>
   </div>
 
-  <!-- Модалка Создания / Редактирования -->
+  <!-- Модалка: Создание / Редактирование -->
   <div id="postModal" class="modal-overlay">
-    <div class="modal">
+    <div class="modal" style="max-height: 95vh;">
       <div class="modal-header">
-        <h3 id="postModalTitle">Новое объявление</h3>
-        <button class="close-btn" onclick="closeModal('postModal')">&times;</button>
+        <span id="postModalTitle">Новое объявление</span>
+        <button class="close-btn" onclick="closeModal('postModal')">✕</button>
       </div>
       <form onsubmit="handleSavePost(event)">
         <input type="hidden" id="editPostId">
-        <div class="form-group"><label>Название товара</label><input type="text" id="postTitle" required></div>
-        <div class="form-group"><label>Цена (₽)</label><input type="number" id="postPrice" required></div>
+        <div class="form-group"><label>Название товара</label><input type="text" id="postTitle" required placeholder="Например, iPhone 13"></div>
+        <div class="form-group"><label>Цена (₽)</label><input type="number" id="postPrice" required placeholder="45000"></div>
         <div class="form-group">
-          <label>Фото (выберите новый файл или оставьте пустым)</label>
+          <label>Фото (выберите файл с телефона)</label>
           <input type="file" id="postImageFile" accept="image/*">
           <input type="hidden" id="existingImage">
         </div>
-        <div class="form-group"><label>Описание</label><textarea id="postDesc" rows="2" required></textarea></div>
+        <div class="form-group"><label>Описание</label><textarea id="postDesc" rows="3" required placeholder="Состояние, комплект..."></textarea></div>
         <div class="form-group"><label>Контакты</label><input type="text" id="postContacts" required placeholder="+7 999 000-00-00"></div>
-        <button type="submit" class="btn btn-primary" style="width: 100%;">Сохранить</button>
+        <button type="submit" class="btn btn-success">Опубликовать объявление</button>
       </form>
     </div>
   </div>
 
-  <!-- Панель Администратора -->
+  <!-- Модалка: Панель Администратора -->
   <div id="adminModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h3>Управление пользователями</h3>
-        <button class="close-btn" onclick="closeModal('adminModal')">&times;</button>
+        <span>Управление пользователями</span>
+        <button class="close-btn" onclick="closeModal('adminModal')">✕</button>
       </div>
-      <div id="adminUserList" class="user-list">
-        <!-- Список пользователей подгружается сюда -->
-      </div>
+      <div id="adminUserList" class="user-list"></div>
     </div>
   </div>
 
   <script>
+    // КОНФИГУРАЦИЯ FIREBASE (ВАШИ КЛЮЧИ)
     const firebaseConfig = {
       apiKey: "AIzaSyBiW1GNyhjJiuEJapEP0Qx06_PrfbmEBTc",
       authDomain: "nicemarket-d77d0.firebaseapp.com",
@@ -156,7 +211,6 @@
       messagingSenderId: "848367524440",
       appId: "1:848367524440:web:096d45aaf48a48f75c882d"
     };
-
     const ADMIN_EMAIL = "Nomer0084@gmail.com"; 
 
     firebase.initializeApp(firebaseConfig);
@@ -166,67 +220,77 @@
     let isRegisterMode = false;
     let isAdmin = false;
 
-    // Авторизация и проверка на БАН
+    // Авторизация
     auth.onAuthStateChanged(async (user) => {
       if (user) {
-        // Проверяем/создаем пользователя в базе
         const userRef = db.collection('users').doc(user.uid);
         const docSnap = await userRef.get();
-        
         if (!docSnap.exists) {
           await userRef.set({ email: user.email, banned: false, role: 'user' });
         } else if (docSnap.data().banned) {
-          alert("❌ ВАШ АККАУНТ ЗАБЛОКИРОВАН АДМИНИСТРАЦИЕЙ!");
+          alert("Аккаунт заблокирован!");
           auth.signOut();
           return;
         }
-
         currentUser = user;
         isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
         
-        document.getElementById('authGuest').classList.add('hidden');
-        document.getElementById('authUser').classList.remove('hidden');
-        document.getElementById('userEmailBadge').textContent = user.email + (isAdmin ? ' (Админ)' : '');
-        
-        if(isAdmin) document.getElementById('adminPanelBtn').classList.remove('hidden');
+        document.getElementById('profileEmailTitle').textContent = user.email;
+        document.getElementById('adminBtn').style.display = isAdmin ? 'block' : 'none';
       } else {
         currentUser = null;
         isAdmin = false;
-        document.getElementById('authGuest').classList.remove('hidden');
-        document.getElementById('authUser').classList.add('hidden');
-        document.getElementById('adminPanelBtn').classList.add('hidden');
       }
       loadPosts(); 
     });
 
+    // Навигация (Профиль и Плюс)
+    function handleProfileClick() {
+      if (currentUser) openModal('profileMenuModal');
+      else openModal('authModal');
+    }
+    function handleAddClick() {
+      if (currentUser) {
+        document.getElementById('editPostId').value = '';
+        document.getElementById('postModalTitle').textContent = 'Новое объявление';
+        document.getElementById('existingImage').value = '';
+        document.querySelector('#postModal form').reset();
+        openModal('postModal');
+      } else {
+        openModal('authModal');
+      }
+    }
+
+    // Авторизация логика
     async function handleAuth(e) {
       e.preventDefault();
       const em = document.getElementById('authEmail').value;
       const pw = document.getElementById('authPassword').value;
       try {
         let cred;
-        if (isRegisterMode) cred = await auth.createUserWithEmailAndPassword(em, pw);
-        else cred = await auth.signInWithEmailAndPassword(em, pw);
-        
-        // Записываем в базу принудительно при регистрации
-        if(isRegisterMode) {
+        if (isRegisterMode) {
+          cred = await auth.createUserWithEmailAndPassword(em, pw);
           await db.collection('users').doc(cred.user.uid).set({ email: em, banned: false, role: 'user' });
+        } else {
+          await auth.signInWithEmailAndPassword(em, pw);
         }
         closeModal('authModal');
-      } catch (err) { alert(err.message); }
+      } catch (err) { alert("Ошибка: " + err.message); }
     }
 
     function toggleAuthMode(e) {
-      e.preventDefault();
       isRegisterMode = !isRegisterMode;
       document.getElementById('authModalTitle').textContent = isRegisterMode ? 'Регистрация' : 'Вход';
       document.getElementById('authSubmitBtn').textContent = isRegisterMode ? 'Зарегистрироваться' : 'Войти';
       document.getElementById('authSwitchLink').textContent = isRegisterMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
     }
 
-    function logoutUser() { auth.signOut(); }
+    function logoutUser() { 
+      auth.signOut(); 
+      closeModal('profileMenuModal'); 
+    }
 
-    // Конвертация фото
+    // Изображения
     function getBase64(file) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -236,28 +300,13 @@
       });
     }
 
-    // Открытие модалки создания (сброс полей)
-    function openPostModal() {
-      document.getElementById('editPostId').value = '';
-      document.getElementById('postModalTitle').textContent = 'Новое объявление';
-      document.getElementById('existingImage').value = '';
-      document.querySelector('#postModal form').reset();
-      openModal('postModal');
-    }
-
-    // Сохранение (Создание ИЛИ Редактирование)
+    // Сохранение поста
     async function handleSavePost(e) {
       e.preventDefault();
       if (!currentUser) return;
-      
       const fileInput = document.getElementById('postImageFile');
-      let base64Img = document.getElementById('existingImage').value; // берем старое, если есть
-      
-      // Если загрузили новое фото - обновляем
-      if(fileInput.files.length > 0) {
-        base64Img = await getBase64(fileInput.files[0]);
-      }
-
+      let base64Img = document.getElementById('existingImage').value;
+      if(fileInput.files.length > 0) base64Img = await getBase64(fileInput.files[0]);
       if(!base64Img) { alert("Выберите фото!"); return; }
 
       const postData = {
@@ -267,62 +316,54 @@
         description: document.getElementById('postDesc').value,
         contacts: document.getElementById('postContacts').value
       };
-
       const editId = document.getElementById('editPostId').value;
+
       try {
-        if(editId) {
-          // Редактируем
-          await db.collection('products').doc(editId).update(postData);
-        } else {
-          // Создаем новое
+        if(editId) await db.collection('products').doc(editId).update(postData);
+        else {
           postData.sellerEmail = currentUser.email;
           postData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          postData.pinned = false; // по умолчанию не закреплено
+          postData.pinned = false;
           await db.collection('products').add(postData);
         }
         closeModal('postModal');
       } catch (err) { alert(err.message); }
     }
 
-    // Загрузка постов
+    // Загрузка
     function loadPosts() {
       db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
         const grid = document.getElementById('itemsGrid');
         grid.innerHTML = '';
-        
         let posts = [];
-        snapshot.forEach((doc) => posts.push({ id: doc.id, ...doc.data() }));
-        
-        // Сортируем: сначала закрепленные
+        snapshot.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
         posts.sort((a, b) => (b.pinned === true) - (a.pinned === true));
 
         posts.forEach(item => {
           const isOwner = currentUser && currentUser.email === item.sellerEmail;
-          
           let adminBtns = '';
+          
           if(isAdmin || isOwner) {
-            adminBtns += `<button class="btn btn-secondary btn-small" onclick="editPost('${item.id}', '${item.title}', ${item.price}, '${item.description.replace(/'/g, "\\'")}', '${item.contacts}', '${item.image}')">Ред.</button>`;
-            adminBtns += `<button class="btn btn-danger btn-small" onclick="deletePost('${item.id}')">Удалить</button>`;
+            adminBtns += `<button class="admin-btn" onclick="editPost('${item.id}', '${item.title}', ${item.price}, '${item.description.replace(/'/g, "\\'")}', '${item.contacts}', '${item.image}')">✎ Ред</button>`;
+            adminBtns += `<button class="admin-btn red" onclick="deletePost('${item.id}')">✕ Удал</button>`;
           }
           if(isAdmin) {
-            const pinText = item.pinned ? 'Открепить' : '📌 Закрепить';
-            adminBtns += `<button class="btn btn-warning btn-small" onclick="togglePin('${item.id}', ${item.pinned})">${pinText}</button>`;
+            adminBtns += `<button class="admin-btn yellow" onclick="togglePin('${item.id}', ${item.pinned})">${item.pinned ? 'Открепить' : '📌 В ТОП'}</button>`;
           }
 
           const card = document.createElement('div');
           card.className = 'card';
           card.innerHTML = `
-            ${item.pinned ? '<div class="pinned-badge">📌 ТОП</div>' : ''}
-            <img class="card-img" src="${item.image}" alt="Фото">
-            <div class="card-body">
+            <div class="card-img-wrap">
+              ${item.pinned ? '<div class="pinned-badge">ТОП</div>' : ''}
+              <img class="card-img" src="${item.image}">
+              <div class="card-fav">🤍</div>
+            </div>
+            <div class="card-info">
               <div class="card-price">${item.price} ₽</div>
               <div class="card-title">${item.title}</div>
-              <div class="card-desc">${item.description}</div>
               <div class="card-contacts">📞 ${item.contacts || 'Нет данных'}</div>
-              <div class="card-footer" style="flex-direction: column; align-items: flex-start; gap: 10px;">
-                <span>👤 ${item.sellerEmail}</span>
-                <div style="display: flex; gap: 5px; flex-wrap: wrap;">${adminBtns}</div>
-              </div>
+              ${adminBtns ? `<div class="admin-actions">${adminBtns}</div>` : ''}
             </div>
           `;
           grid.appendChild(card);
@@ -330,65 +371,44 @@
       });
     }
 
-    // Действия с постами
-    async function deletePost(id) {
-      if(confirm('Точно удалить?')) await db.collection('products').doc(id).delete();
-    }
-    
-    async function togglePin(id, currentStatus) {
-      await db.collection('products').doc(id).update({ pinned: !currentStatus });
-    }
-
+    // Действия (Удалить, ТОП, Ред)
+    async function deletePost(id) { if(confirm('Удалить?')) await db.collection('products').doc(id).delete(); }
+    async function togglePin(id, currentStatus) { await db.collection('products').doc(id).update({ pinned: !currentStatus }); }
     function editPost(id, title, price, desc, contacts, imgUrl) {
-      document.getElementById('postModalTitle').textContent = 'Редактировать объявление';
+      document.getElementById('postModalTitle').textContent = 'Редактировать';
       document.getElementById('editPostId').value = id;
       document.getElementById('postTitle').value = title;
       document.getElementById('postPrice').value = price;
       document.getElementById('postDesc').value = desc;
       document.getElementById('postContacts').value = contacts;
-      document.getElementById('existingImage').value = imgUrl; // сохраняем старое фото
+      document.getElementById('existingImage').value = imgUrl;
       openModal('postModal');
     }
 
-    // ПАНЕЛЬ АДМИНИСТРАТОРА
+    // Админка
     function openAdminPanel() {
-      if(!isAdmin) return;
+      closeModal('profileMenuModal');
       openModal('adminModal');
       const list = document.getElementById('adminUserList');
-      list.innerHTML = 'Загрузка...';
-
       db.collection('users').onSnapshot(snapshot => {
         list.innerHTML = '';
         snapshot.forEach(doc => {
           const u = doc.data();
           const isMe = u.email === ADMIN_EMAIL;
+          let btn = !isMe ? (u.banned 
+            ? `<button style="background:#555;color:#fff;border:none;padding:6px 12px;border-radius:6px;" onclick="toggleBan('${doc.id}', false)">Разбанить</button>`
+            : `<button style="background:#ff4757;color:#fff;border:none;padding:6px 12px;border-radius:6px;" onclick="toggleBan('${doc.id}', true)">Забанить</button>`) : '';
           
-          let actionBtn = '';
-          if(!isMe) {
-            actionBtn = u.banned 
-              ? `<button class="btn btn-secondary btn-small" onclick="toggleBan('${doc.id}', false)">Разбанить</button>`
-              : `<button class="btn btn-danger btn-small" onclick="toggleBan('${doc.id}', true)">Забанить</button>`;
-          }
-
-          list.innerHTML += `
-            <div class="user-item">
-              <div>
-                <div class="user-email">${u.email} ${isMe ? '⭐' : ''}</div>
-                ${u.banned ? '<div class="banned-text">Заблокирован</div>' : ''}
-              </div>
-              <div>${actionBtn}</div>
-            </div>
-          `;
+          list.innerHTML += `<div class="user-item">
+              <div><div style="font-weight:600">${u.email} ${isMe ? '👑' : ''}</div>${u.banned ? '<div style="color:#ff4757;font-size:12px;">Забанен</div>' : ''}</div>
+              ${btn}
+            </div>`;
         });
       });
     }
+    async function toggleBan(uid, status) { await db.collection('users').doc(uid).update({ banned: status }); }
 
-    async function toggleBan(uid, banStatus) {
-      if(confirm(banStatus ? 'Точно забанить пользователя?' : 'Разбанить пользователя?')) {
-        await db.collection('users').doc(uid).update({ banned: banStatus });
-      }
-    }
-
+    // Утилиты
     function openModal(id) { document.getElementById(id).classList.add('active'); }
     function closeModal(id) { document.getElementById(id).classList.remove('active'); }
   </script>
