@@ -2,415 +2,280 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Nicemarket</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ООО «Техмет» — Строительство зданий и сооружений</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f0f11;
-      --surface: #1c1c1e;
-      --text: #ffffff;
-      --text-muted: #8e8e93;
-      --primary: #2ed573;
-      --danger: #ff4757;
-      --radius: 16px;
+      --primary: #f59e0b; /* Строительный желто-оранжевый */
+      --primary-hover: #d97706;
+      --dark: #1e293b; /* Глубокий темно-синий */
+      --darker: #0f172a;
+      --light: #f8fafc;
+      --text: #334155;
+      --gray: #64748b;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background-color: var(--bg); color: var(--text); min-height: 100vh; padding-bottom: 80px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+    body { color: var(--text); background-color: var(--light); line-height: 1.6; }
+    a { text-decoration: none; color: inherit; }
 
-    /* Верхняя часть (Поиск и Баннер) */
-    .top-header { padding: 16px; position: sticky; top: 0; background: var(--bg); z-index: 10; }
-    .search-bar-container { display: flex; gap: 10px; align-items: center; margin-bottom: 12px; }
-    .search-bar { flex: 1; background: #ffffff; border-radius: 20px; padding: 12px 16px; display: flex; align-items: center; gap: 10px; color: #000; }
-    .search-bar input { border: none; background: transparent; outline: none; width: 100%; font-size: 16px; }
-    .cart-btn { background: #ffffff; border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #000; border: none; font-size: 20px; }
-    
-    .promo-banner { background: linear-gradient(90deg, #2ed573, #a29bfe); border-radius: 12px; padding: 16px; font-weight: 800; font-size: 18px; color: #000; display: flex; justify-content: space-between; align-items: center; }
+    /* Шапка сайта */
+    header { background-color: var(--darker); color: white; position: fixed; width: 100%; top: 0; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 24px; font-weight: 800; display: flex; align-items: center; gap: 10px; color: white; }
+    .logo span { color: var(--primary); }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a { font-weight: 500; transition: color 0.3s; }
+    .nav-links a:hover { color: var(--primary); }
+    .header-contact { display: flex; align-items: center; gap: 15px; }
+    .phone { font-weight: 700; font-size: 18px; }
 
-    /* Категории (горизонтальный скролл) */
-    .categories { display: flex; overflow-x: auto; padding: 0 16px 16px 16px; gap: 10px; scrollbar-width: none; }
-    .categories::-webkit-scrollbar { display: none; }
-    .cat-item { min-width: 110px; height: 110px; background: var(--surface); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; justify-content: space-between; font-size: 13px; font-weight: 600; }
-    .cat-item.large { min-width: 150px; }
-    .cat-icon { font-size: 28px; align-self: flex-end; }
+    /* Кнопки */
+    .btn { padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.3s; border: none; text-align: center; display: inline-block; }
+    .btn-primary { background-color: var(--primary); color: var(--darker); }
+    .btn-primary:hover { background-color: var(--primary-hover); color: white; }
+    .btn-outline { border: 2px solid var(--primary); color: var(--primary); background: transparent; }
+    .btn-outline:hover { background-color: var(--primary); color: var(--darker); }
 
-    /* Сетка товаров */
-    .grid-container { padding: 0 16px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-    .card { background: transparent; display: flex; flex-direction: column; position: relative; }
-    .card-img-wrap { width: 100%; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; position: relative; background: var(--surface); }
-    .card-img { width: 100%; height: 100%; object-fit: cover; }
-    .pinned-badge { position: absolute; top: 8px; left: 8px; background: #f1c40f; color: #000; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: bold; }
-    .card-fav { position: absolute; bottom: 8px; right: 8px; font-size: 20px; }
-    
-    .card-info { padding: 8px 4px; }
-    .card-price { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
-    .card-title { font-size: 14px; color: var(--text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; margin-bottom: 4px; }
-    .card-contacts { font-size: 12px; color: #a29bfe; margin-bottom: 4px; }
-    
-    /* Кнопки админа в карточке */
-    .admin-actions { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-    .admin-btn { background: rgba(255,255,255,0.1); border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; cursor: pointer; }
-    .admin-btn.red { background: rgba(255, 71, 87, 0.2); color: #ff4757; }
-    .admin-btn.yellow { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+    /* Главный экран (Hero) */
+    .hero { margin-top: 70px; background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.9)), url('https://images.unsplash.com/photo-1541888086425-d81bb19240f5?auto=format&fit=crop&w=1920&q=80') center/cover; color: white; padding: 120px 20px; text-align: center; }
+    .hero-content { max-width: 800px; margin: 0 auto; }
+    .hero h1 { font-size: 48px; font-weight: 800; margin-bottom: 20px; line-height: 1.2; }
+    .hero p { font-size: 20px; color: #cbd5e1; margin-bottom: 40px; }
+    .hero-buttons { display: flex; gap: 20px; justify-content: center; }
 
-    /* Нижнее меню (Bottom Nav) */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(28, 28, 30, 0.95); backdrop-filter: blur(10px); border-top: 1px solid #333; display: flex; justify-content: space-around; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
-    .nav-item { background: none; border: none; color: var(--text-muted); display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 10px; cursor: pointer; width: 20%; }
-    .nav-item.active { color: var(--text); }
-    .nav-icon { font-size: 24px; }
+    /* Секции общие */
+    section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
+    .section-title { text-align: center; font-size: 36px; font-weight: 800; color: var(--dark); margin-bottom: 50px; position: relative; }
+    .section-title::after { content: ''; width: 80px; height: 4px; background-color: var(--primary); display: block; margin: 15px auto 0; border-radius: 2px; }
 
-    /* Модальные окна */
-    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); z-index: 200; display: flex; align-items: flex-end; visibility: hidden; opacity: 0; transition: all 0.3s; }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
-    .modal { background: #1c1c1e; width: 100%; border-radius: 24px 24px 0 0; padding: 24px 20px; max-height: 90vh; overflow-y: auto; transform: translateY(100%); transition: transform 0.3s; }
-    .modal-overlay.active .modal { transform: translateY(0); }
-    
-    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 18px; font-weight: 700; }
-    .close-btn { background: #333; border: none; color: white; width: 32px; height: 32px; border-radius: 16px; font-size: 16px; }
+    /* О компании */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+    .about-text h3 { font-size: 24px; margin-bottom: 20px; color: var(--dark); }
+    .about-text p { margin-bottom: 15px; font-size: 16px; color: var(--gray); }
+    .stats { display: flex; gap: 30px; margin-top: 30px; }
+    .stat-item { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); flex: 1; text-align: center; border-bottom: 4px solid var(--primary); }
+    .stat-num { font-size: 36px; font-weight: 800; color: var(--dark); }
+    .stat-desc { font-size: 14px; color: var(--gray); font-weight: 600; text-transform: uppercase; }
 
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 8px; font-size: 13px; color: var(--text-muted); }
-    .form-group input, .form-group textarea { width: 100%; padding: 14px; border-radius: 12px; background: #2c2c2e; border: 1px solid #3a3a3c; color: white; font-size: 16px; }
-    
-    .btn { width: 100%; padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; border: none; cursor: pointer; color: white; margin-bottom: 12px; }
-    .btn-primary { background: #3498db; }
-    .btn-success { background: var(--primary); color: #000; }
-    .btn-danger { background: var(--danger); }
-    .btn-warning { background: #f1c40f; color: #000; }
+    /* Услуги */
+    .services { background-color: #f1f5f9; max-width: 100%; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    .service-card { background: white; padding: 40px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); transition: transform 0.3s; }
+    .service-card:hover { transform: translateY(-10px); }
+    .service-icon { font-size: 40px; margin-bottom: 20px; }
+    .service-card h3 { font-size: 20px; color: var(--dark); margin-bottom: 15px; }
+    .service-card p { color: var(--gray); font-size: 15px; }
 
-    /* Админка список */
-    .user-list { display: flex; flex-direction: column; gap: 10px; }
-    .user-item { background: #2c2c2e; padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
+    /* Контакты */
+    .contact-section { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; background: white; padding: 50px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-top: 40px; }
+    .contact-info h3 { font-size: 28px; margin-bottom: 20px; color: var(--dark); }
+    .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 18px; }
+    .contact-icon { background: var(--light); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 20px; color: var(--primary); }
+
+    .form-group { margin-bottom: 20px; }
+    .form-control { width: 100%; padding: 15px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 16px; font-family: inherit; }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+
+    /* Подвал */
+    footer { background-color: var(--darker); color: #cbd5e1; padding: 40px 20px; text-align: center; }
+    footer p { margin-top: 20px; font-size: 14px; }
+
+    /* Адаптивность для мобильных */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 32px; }
+      .hero-buttons { flex-direction: column; }
+      .about-grid { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; }
+      .contact-section { grid-template-columns: 1fr; padding: 30px 20px; }
+      .header-contact .btn { display: none; }
+    }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
-  <div class="top-header">
-    <div class="search-bar-container">
-      <div class="search-bar">
-        <span>🔍</span>
-        <input type="text" placeholder="Поиск в Москве и Мос...">
-        <span>🎛️</span>
-      </div>
-      <button class="cart-btn">🛒</button>
-    </div>
-    <div class="promo-banner">
-      Скидки каждый день <span>></span>
-    </div>
-  </div>
-
-  <div class="categories">
-    <div class="cat-item" style="background: #273c75;"><span>Все</span><span class="cat-icon">🟩</span></div>
-    <div class="cat-item large" style="background: #2d3436;"><span>Недвижимость</span><span class="cat-icon">🏠</span></div>
-    <div class="cat-item large" style="background: #1e272e;"><span>Работа и<br>подработка</span><span class="cat-icon">💼</span></div>
-    <div class="cat-item" style="background: #192a56;"><span>Авто</span><span class="cat-icon">🚙</span></div>
-    <div class="cat-item" style="background: #2f3640;"><span>Электроника</span><span class="cat-icon">📱</span></div>
-  </div>
-
-  <div class="grid-container">
-    <div id="itemsGrid" class="grid">
-      <div style="color: var(--text-muted); padding: 20px;">Загрузка объявлений...</div>
-    </div>
-  </div>
-
-  <!-- Нижнее меню -->
-  <nav class="bottom-nav">
-    <button class="nav-item active">
-      <span class="nav-icon">🔍</span><span>Поиск</span>
-    </button>
-    <button class="nav-item">
-      <span class="nav-icon">❤️</span><span>Избранное</span>
-    </button>
-    <button class="nav-item" onclick="handleAddClick()">
-      <span class="nav-icon" style="font-size: 28px; color: #2ed573;">⊕</span><span>Объявления</span>
-    </button>
-    <button class="nav-item">
-      <span class="nav-icon">💬</span><span>Сообщения</span>
-    </button>
-    <button class="nav-item" onclick="handleProfileClick()">
-      <span class="nav-icon">👤</span><span>Профиль</span>
-    </button>
-  </nav>
-
-  <!-- Модалка: Профиль (Меню) -->
-  <div id="profileMenuModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span id="profileEmailTitle">Профиль</span>
-        <button class="close-btn" onclick="closeModal('profileMenuModal')">✕</button>
-      </div>
-      <button id="adminBtn" class="btn btn-warning" style="display: none;" onclick="openAdminPanel()">👑 Панель Администратора</button>
-      <button class="btn btn-danger" onclick="logoutUser()">Выйти из аккаунта</button>
-    </div>
-  </div>
-
-  <!-- Модалка: Вход / Регистрация -->
-  <div id="authModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span id="authModalTitle">Вход в аккаунт</span>
-        <button class="close-btn" onclick="closeModal('authModal')">✕</button>
-      </div>
-      <form onsubmit="handleAuth(event)">
-        <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
-        <div class="form-group"><label>Пароль</label><input type="password" id="authPassword" required></div>
-        <button type="submit" id="authSubmitBtn" class="btn btn-primary">Войти</button>
-      </form>
-      <div style="text-align: center; margin-top: 10px;">
-        <span style="color: var(--text-muted); font-size: 14px;" onclick="toggleAuthMode(event)" id="authSwitchLink">Нет аккаунта? Зарегистрироваться</span>
+  <!-- Навигация -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
+        О-ТЕХМЕТ
+      </a>
+      <nav class="nav-links">
+        <a href="#about">О компании</a>
+        <a href="#services">Услуги</a>
+        <a href="#projects">Проекты</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+      <div class="header-contact">
+        <span class="phone">+7 (999) 000-00-00</span>
+        <a href="#contacts" class="btn btn-primary">Оставить заявку</a>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Модалка: Создание / Редактирование -->
-  <div id="postModal" class="modal-overlay">
-    <div class="modal" style="max-height: 95vh;">
-      <div class="modal-header">
-        <span id="postModalTitle">Новое объявление</span>
-        <button class="close-btn" onclick="closeModal('postModal')">✕</button>
+  <!-- Главный экран -->
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Профессиональное строительство зданий и сооружений</h1>
+      <p>Компания «Техмет» — ваш надежный генподрядчик. Мы реализуем проекты любой сложности: от проектирования до сдачи объекта в эксплуатацию точно в срок.</p>
+      <div class="hero-buttons">
+        <a href="#contacts" class="btn btn-primary">Обсудить проект</a>
+        <a href="#services" class="btn btn-outline">Наши услуги</a>
       </div>
-      <form onsubmit="handleSavePost(event)">
-        <input type="hidden" id="editPostId">
-        <div class="form-group"><label>Название товара</label><input type="text" id="postTitle" required placeholder="Например, iPhone 13"></div>
-        <div class="form-group"><label>Цена (₽)</label><input type="number" id="postPrice" required placeholder="45000"></div>
-        <div class="form-group">
-          <label>Фото (выберите файл с телефона)</label>
-          <input type="file" id="postImageFile" accept="image/*">
-          <input type="hidden" id="existingImage">
+    </div>
+  </section>
+
+  <!-- О компании -->
+  <section id="about">
+    <h2 class="section-title">О компании «Техмет»</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <h3>Строим на века. Сдаем вовремя.</h3>
+        <p>ООО «Техмет» работает на рынке строительных услуг уже <strong>несколько лет</strong>. За это время мы сформировали команду профессионалов, которым доверяют возведение как коммерческих, так и промышленных объектов.</p>
+        <p>Мы берем на себя полный цикл работ. Соблюдение ГОСТов, СНиПов и техники безопасности — наше главное правило. Мы используем передовые технологии и качественные материалы (в том числе надежные металлоконструкции), чтобы здания служили десятилетиями.</p>
+        
+        <div class="stats">
+          <div class="stat-item">
+            <div class="stat-num">5+</div>
+            <div class="stat-desc">Лет на рынке</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-num">100%</div>
+            <div class="stat-desc">Сдача в срок</div>
+          </div>
         </div>
-        <div class="form-group"><label>Описание</label><textarea id="postDesc" rows="3" required placeholder="Состояние, комплект..."></textarea></div>
-        <div class="form-group"><label>Контакты</label><input type="text" id="postContacts" required placeholder="+7 999 000-00-00"></div>
-        <button type="submit" class="btn btn-success">Опубликовать объявление</button>
-      </form>
+      </div>
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80" alt="Строительство" style="width: 100%; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+      </div>
     </div>
+  </section>
+
+  <!-- Услуги -->
+  <div class="services" id="services">
+    <section>
+      <h2 class="section-title">Что мы строим</h2>
+      <div class="services-grid">
+        
+        <div class="service-card">
+          <div class="service-icon">🏭</div>
+          <h3>Промышленные здания</h3>
+          <p>Возведение цехов, складов, ангаров и производственных комплексов. Работаем с тяжелыми металлоконструкциями и железобетоном.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏢</div>
+          <h3>Коммерческая недвижимость</h3>
+          <p>Строительство торговых центров, офисных зданий, автосалонов и павильонов с современными фасадными решениями.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">🏗️</div>
+          <h3>Металлоконструкции</h3>
+          <p>Изготовление и монтаж несущих металлокаркасов зданий, эстакад, навесов. Высокая скорость сборки и надежность.</p>
+        </div>
+
+        <div class="service-card">
+          <div class="service-icon">📐</div>
+          <h3>Проектирование и генподряд</h3>
+          <p>Комплексное управление строительством. От создания проекта и получения разрешений до пусконаладочных работ.</p>
+        </div>
+
+      </div>
+    </section>
   </div>
 
-  <!-- Модалка: Панель Администратора -->
-  <div id="adminModal" class="modal-overlay">
-    <div class="modal">
-      <div class="modal-header">
-        <span>Управление пользователями</span>
-        <button class="close-btn" onclick="closeModal('adminModal')">✕</button>
+  <!-- Контакты -->
+  <section id="contacts">
+    <h2 class="section-title">Свяжитесь с нами</h2>
+    <div class="contact-section">
+      <div class="contact-info">
+        <h3>Готовы начать строительство?</h3>
+        <p style="color: var(--gray); margin-bottom: 30px;">Позвоните нам или оставьте заявку. Наши инженеры ответят на все вопросы и подготовят предварительную смету.</p>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div style="font-size: 14px; color: var(--gray);">Телефон</div>
+            <strong>+7 (999) 000-00-00</strong>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div style="font-size: 14px; color: var(--gray);">Email</div>
+            <strong>info@tehmet.ru</strong>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div style="font-size: 14px; color: var(--gray);">Офис</div>
+            <strong>г. Москва, Строительный проезд, д. 1</strong>
+          </div>
+        </div>
       </div>
-      <div id="adminUserList" class="user-list"></div>
+
+      <div class="contact-form">
+        <!-- Форма, которая перекидывает клиента в WhatsApp -->
+        <form onsubmit="sendToWhatsApp(event)">
+          <div class="form-group">
+            <input type="text" id="clientName" class="form-control" placeholder="Ваше имя" required>
+          </div>
+          <div class="form-group">
+            <input type="tel" id="clientPhone" class="form-control" placeholder="Номер телефона" required>
+          </div>
+          <div class="form-group">
+            <textarea id="clientMessage" class="form-control" rows="4" placeholder="Кратко опишите ваш проект (какое здание нужно построить)"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 18px;">Отправить заявку в WhatsApp</button>
+        </form>
+      </div>
     </div>
-  </div>
+  </section>
+
+  <!-- Подвал -->
+  <footer>
+    <div class="logo" style="justify-content: center; margin-bottom: 20px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"/></svg>
+      ООО «ТЕХМЕТ»
+    </div>
+    <p>Профессиональное строительство зданий и сооружений</p>
+    <p>&copy; 2026 ООО «Техмет». Все права защищены.</p>
+  </footer>
 
   <script>
-    // КОНФИГУРАЦИЯ FIREBASE (ВАШИ КЛЮЧИ)
-    const firebaseConfig = {
-      apiKey: "AIzaSyBiW1GNyhjJiuEJapEP0Qx06_PrfbmEBTc",
-      authDomain: "nicemarket-d77d0.firebaseapp.com",
-      projectId: "nicemarket-d77d0",
-      storageBucket: "nicemarket-d77d0.firebasestorage.app",
-      messagingSenderId: "848367524440",
-      appId: "1:848367524440:web:096d45aaf48a48f75c882d"
-    };
-    const ADMIN_EMAIL = "Nomer0084@gmail.com"; 
+    // Скрипт для отправки данных формы напрямую вам в WhatsApp
+    function sendToWhatsApp(e) {
+      e.preventDefault();
+      
+      // ВПИШИТЕ СЮДА ВАШ НОМЕР ТЕЛЕФОНА (начиная с 7, без плюса и скобок)
+      const WA_NUMBER = "79990000000"; 
+      
+      const name = document.getElementById('clientName').value;
+      const phone = document.getElementById('clientPhone').value;
+      const msg = document.getElementById('clientMessage').value;
+      
+      const text = `Здравствуйте! Меня зовут ${name}.%0AМой телефон: ${phone}%0A%0AХочу обсудить проект:%0A${msg}`;
+      const url = `https://wa.me/${WA_NUMBER}?text=${text}`;
+      
+      window.open(url, '_blank');
+    }
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
-    let currentUser = null;
-    let isRegisterMode = false;
-    let isAdmin = false;
-
-    // Авторизация
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const userRef = db.collection('users').doc(user.uid);
-        const docSnap = await userRef.get();
-        if (!docSnap.exists) {
-          await userRef.set({ email: user.email, banned: false, role: 'user' });
-        } else if (docSnap.data().banned) {
-          alert("Аккаунт заблокирован!");
-          auth.signOut();
-          return;
-        }
-        currentUser = user;
-        isAdmin = user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-        
-        document.getElementById('profileEmailTitle').textContent = user.email;
-        document.getElementById('adminBtn').style.display = isAdmin ? 'block' : 'none';
-      } else {
-        currentUser = null;
-        isAdmin = false;
-      }
-      loadPosts(); 
+    // Плавная прокрутка для меню
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
     });
-
-    // Навигация (Профиль и Плюс)
-    function handleProfileClick() {
-      if (currentUser) openModal('profileMenuModal');
-      else openModal('authModal');
-    }
-    function handleAddClick() {
-      if (currentUser) {
-        document.getElementById('editPostId').value = '';
-        document.getElementById('postModalTitle').textContent = 'Новое объявление';
-        document.getElementById('existingImage').value = '';
-        document.querySelector('#postModal form').reset();
-        openModal('postModal');
-      } else {
-        openModal('authModal');
-      }
-    }
-
-    // Авторизация логика
-    async function handleAuth(e) {
-      e.preventDefault();
-      const em = document.getElementById('authEmail').value;
-      const pw = document.getElementById('authPassword').value;
-      try {
-        let cred;
-        if (isRegisterMode) {
-          cred = await auth.createUserWithEmailAndPassword(em, pw);
-          await db.collection('users').doc(cred.user.uid).set({ email: em, banned: false, role: 'user' });
-        } else {
-          await auth.signInWithEmailAndPassword(em, pw);
-        }
-        closeModal('authModal');
-      } catch (err) { alert("Ошибка: " + err.message); }
-    }
-
-    function toggleAuthMode(e) {
-      isRegisterMode = !isRegisterMode;
-      document.getElementById('authModalTitle').textContent = isRegisterMode ? 'Регистрация' : 'Вход';
-      document.getElementById('authSubmitBtn').textContent = isRegisterMode ? 'Зарегистрироваться' : 'Войти';
-      document.getElementById('authSwitchLink').textContent = isRegisterMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
-    }
-
-    function logoutUser() { 
-      auth.signOut(); 
-      closeModal('profileMenuModal'); 
-    }
-
-    // Изображения
-    function getBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
-
-    // Сохранение поста
-    async function handleSavePost(e) {
-      e.preventDefault();
-      if (!currentUser) return;
-      const fileInput = document.getElementById('postImageFile');
-      let base64Img = document.getElementById('existingImage').value;
-      if(fileInput.files.length > 0) base64Img = await getBase64(fileInput.files[0]);
-      if(!base64Img) { alert("Выберите фото!"); return; }
-
-      const postData = {
-        title: document.getElementById('postTitle').value,
-        price: Number(document.getElementById('postPrice').value),
-        image: base64Img,
-        description: document.getElementById('postDesc').value,
-        contacts: document.getElementById('postContacts').value
-      };
-      const editId = document.getElementById('editPostId').value;
-
-      try {
-        if(editId) await db.collection('products').doc(editId).update(postData);
-        else {
-          postData.sellerEmail = currentUser.email;
-          postData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
-          postData.pinned = false;
-          await db.collection('products').add(postData);
-        }
-        closeModal('postModal');
-      } catch (err) { alert(err.message); }
-    }
-
-    // Загрузка
-    function loadPosts() {
-      db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-        const grid = document.getElementById('itemsGrid');
-        grid.innerHTML = '';
-        let posts = [];
-        snapshot.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
-        posts.sort((a, b) => (b.pinned === true) - (a.pinned === true));
-
-        posts.forEach(item => {
-          const isOwner = currentUser && currentUser.email === item.sellerEmail;
-          let adminBtns = '';
-          
-          if(isAdmin || isOwner) {
-            adminBtns += `<button class="admin-btn" onclick="editPost('${item.id}', '${item.title}', ${item.price}, '${item.description.replace(/'/g, "\\'")}', '${item.contacts}', '${item.image}')">✎ Ред</button>`;
-            adminBtns += `<button class="admin-btn red" onclick="deletePost('${item.id}')">✕ Удал</button>`;
-          }
-          if(isAdmin) {
-            adminBtns += `<button class="admin-btn yellow" onclick="togglePin('${item.id}', ${item.pinned})">${item.pinned ? 'Открепить' : '📌 В ТОП'}</button>`;
-          }
-
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <div class="card-img-wrap">
-              ${item.pinned ? '<div class="pinned-badge">ТОП</div>' : ''}
-              <img class="card-img" src="${item.image}">
-              <div class="card-fav">🤍</div>
-            </div>
-            <div class="card-info">
-              <div class="card-price">${item.price} ₽</div>
-              <div class="card-title">${item.title}</div>
-              <div class="card-contacts">📞 ${item.contacts || 'Нет данных'}</div>
-              ${adminBtns ? `<div class="admin-actions">${adminBtns}</div>` : ''}
-            </div>
-          `;
-          grid.appendChild(card);
-        });
-      });
-    }
-
-    // Действия (Удалить, ТОП, Ред)
-    async function deletePost(id) { if(confirm('Удалить?')) await db.collection('products').doc(id).delete(); }
-    async function togglePin(id, currentStatus) { await db.collection('products').doc(id).update({ pinned: !currentStatus }); }
-    function editPost(id, title, price, desc, contacts, imgUrl) {
-      document.getElementById('postModalTitle').textContent = 'Редактировать';
-      document.getElementById('editPostId').value = id;
-      document.getElementById('postTitle').value = title;
-      document.getElementById('postPrice').value = price;
-      document.getElementById('postDesc').value = desc;
-      document.getElementById('postContacts').value = contacts;
-      document.getElementById('existingImage').value = imgUrl;
-      openModal('postModal');
-    }
-
-    // Админка
-    function openAdminPanel() {
-      closeModal('profileMenuModal');
-      openModal('adminModal');
-      const list = document.getElementById('adminUserList');
-      db.collection('users').onSnapshot(snapshot => {
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-          const u = doc.data();
-          const isMe = u.email === ADMIN_EMAIL;
-          let btn = !isMe ? (u.banned 
-            ? `<button style="background:#555;color:#fff;border:none;padding:6px 12px;border-radius:6px;" onclick="toggleBan('${doc.id}', false)">Разбанить</button>`
-            : `<button style="background:#ff4757;color:#fff;border:none;padding:6px 12px;border-radius:6px;" onclick="toggleBan('${doc.id}', true)">Забанить</button>`) : '';
-          
-          list.innerHTML += `<div class="user-item">
-              <div><div style="font-weight:600">${u.email} ${isMe ? '👑' : ''}</div>${u.banned ? '<div style="color:#ff4757;font-size:12px;">Забанен</div>' : ''}</div>
-              ${btn}
-            </div>`;
-        });
-      });
-    }
-    async function toggleBan(uid, status) { await db.collection('users').doc(uid).update({ banned: status }); }
-
-    // Утилиты
-    function openModal(id) { document.getElementById(id).classList.add('active'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
   </script>
 </body>
 </html>
