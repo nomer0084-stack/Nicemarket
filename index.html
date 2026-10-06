@@ -4,8 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nicemarket — Маркетплейс</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -20,282 +18,45 @@
       --radius: 12px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', sans-serif;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    
+    header { background-color: var(--surface); border-bottom: 1px solid var(--surface-border); position: sticky; top: 0; z-index: 10; }
+    .nav-container { max-width: 1200px; margin: 0 auto; padding: 1rem 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 1.5rem; font-weight: 700; color: #818cf8; text-decoration: none; }
+    .nav-actions { display: flex; gap: 0.75rem; align-items: center; }
 
-    body {
-      background-color: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    .btn { padding: 0.6rem 1.2rem; border-radius: var(--radius); font-size: 0.9rem; font-weight: 600; cursor: pointer; border: none; }
+    .btn-primary { background-color: var(--primary); color: white; }
+    .btn-primary:hover { background-color: var(--primary-hover); }
+    .btn-secondary { background-color: transparent; color: var(--text); border: 1px solid var(--surface-border); }
+    .btn-danger { background-color: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .btn-danger:hover { background-color: rgba(239, 68, 68, 0.25); }
 
-    header {
-      background-color: var(--surface);
-      border-bottom: 1px solid var(--surface-border);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+    main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; flex: 1; width: 100%; }
+    .section-title { font-size: 1.5rem; margin-bottom: 1.5rem; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+    .card { background-color: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+    .card-img { width: 100%; height: 200px; object-fit: cover; background-color: #0b0f19; }
+    .card-body { padding: 1rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
+    .card-price { font-size: 1.25rem; font-weight: 700; color: #38bdf8; }
+    .card-title { font-size: 1rem; font-weight: 600; line-height: 1.3; }
+    .card-desc { color: var(--text-muted); font-size: 0.85rem; line-height: 1.4; flex: 1; }
+    .card-contacts { color: #818cf8; font-size: 0.85rem; font-weight: 500; margin-top: 0.5rem; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-top: 1px solid var(--surface-border); padding-top: 0.75rem; margin-top: 0.5rem; }
 
-    .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 1rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #818cf8;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .nav-actions {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .btn {
-      padding: 0.6rem 1.2rem;
-      border-radius: var(--radius);
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .btn-primary {
-      background-color: var(--primary);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
-    }
-
-    .btn-secondary {
-      background-color: transparent;
-      color: var(--text);
-      border: 1px solid var(--surface-border);
-    }
-
-    .btn-secondary:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .btn-danger {
-      background-color: rgba(239, 68, 68, 0.15);
-      color: var(--danger);
-    }
-
-    .btn-danger:hover {
-      background-color: rgba(239, 68, 68, 0.25);
-    }
-
-    main {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-      flex: 1;
-      width: 100%;
-    }
-
-    .hero-banner {
-      background: linear-gradient(135deg, #312e81 0%, #1e1b4b 100%);
-      border: 1px solid #4338ca;
-      border-radius: var(--radius);
-      padding: 2.5rem 2rem;
-      margin-bottom: 2.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-    }
-
-    .hero-banner h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .hero-banner p {
-      color: var(--text-muted);
-      max-width: 600px;
-    }
-
-    .section-title {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .card {
-      background-color: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s ease, border-color 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: #4f46e5;
-    }
-
-    .card-img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      background-color: #0b0f19;
-    }
-
-    .card-body {
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card-price {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #38bdf8;
-      margin-bottom: 0.4rem;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      line-height: 1.3;
-    }
-
-    .card-desc {
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      line-height: 1.4;
-      margin-bottom: 1rem;
-      flex: 1;
-    }
-
-    .card-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--surface-border);
-      padding-top: 0.75rem;
-    }
-
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.75);
-      backdrop-filter: blur(4px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 50;
-      padding: 1rem;
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.2s ease;
-    }
-
-    .modal-overlay.active {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .modal {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: var(--radius);
-      width: 100%;
-      max-width: 480px;
-      padding: 2rem;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-    }
-
-    .close-btn {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-
-    .form-group {
-      margin-bottom: 1.2rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.4rem;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .form-group input, .form-group textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 8px;
-      background: var(--bg);
-      border: 1px solid var(--surface-border);
-      color: var(--text);
-      font-size: 0.95rem;
-    }
-
-    .form-group input:focus, .form-group textarea:focus {
-      outline: none;
-      border-color: var(--primary);
-    }
-
-    .status-msg {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-
-    .hidden {
-      display: none !important;
-    }
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 1rem; visibility: hidden; opacity: 0; }
+    .modal-overlay.active { visibility: visible; opacity: 1; }
+    .modal { background: var(--surface); border: 1px solid var(--surface-border); border-radius: var(--radius); width: 100%; max-width: 480px; padding: 2rem; max-height: 90vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; margin-bottom: 1.5rem; }
+    .close-btn { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+    
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.85rem; color: var(--text-muted); }
+    .form-group input, .form-group textarea { width: 100%; padding: 0.75rem; border-radius: 8px; background: var(--bg); border: 1px solid var(--surface-border); color: var(--text); }
+    .hidden { display: none !important; }
   </style>
-
-  <!-- Firebase App & Services -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -304,16 +65,12 @@
 
   <header>
     <div class="nav-container">
-      <a href="#" class="logo">🛍️ Nicemarket</a>
+      <a href="#" class="logo">🛍️️ Nicemarket</a>
       <div class="nav-actions">
-        <!-- Блок гостя -->
-        <div id="authGuest" class="nav-actions">
-          <button class="btn btn-secondary" onclick="openModal('authModal')">Войти</button>
-        </div>
-        <!-- Блок авторизованного пользователя -->
-        <div id="authUser" class="nav-actions hidden">
-          <span id="userEmailBadge" style="font-size: 0.85rem; color: var(--text-muted);"></span>
-          <button class="btn btn-primary" onclick="openModal('createPostModal')">+ Подать объявление</button>
+        <div id="authGuest"><button class="btn btn-secondary" onclick="openModal('authModal')">Войти</button></div>
+        <div id="authUser" class="hidden">
+          <span id="userEmailBadge" style="margin-right: 10px; font-size: 0.85rem;"></span>
+          <button class="btn btn-primary" onclick="openModal('createPostModal')">+ Объявление</button>
           <button class="btn btn-danger" onclick="logoutUser()">Выйти</button>
         </div>
       </div>
@@ -321,50 +78,29 @@
   </header>
 
   <main>
-    <div class="hero-banner">
-      <div>
-        <h1>Маркетплейс объявлений</h1>
-        <p>Покупайте и продавайте товары быстро и безопасно прямо через интернет.</p>
-      </div>
-      <div>
-        <button id="heroActionBtn" class="btn btn-primary" onclick="handleHeroBtnClick()">Подать объявление</button>
-      </div>
-    </div>
-
-    <h2 class="section-title">Свежие объявления</h2>
-    <div id="itemsGrid" class="grid">
-      <!-- Сюда подгружаются объявления из Firebase -->
-      <div style="color: var(--text-muted);">Загрузка объявлений...</div>
-    </div>
+    <h2 class="section-title">Все объявления</h2>
+    <div id="itemsGrid" class="grid"><div style="color: gray;">Загрузка...</div></div>
   </main>
 
-  <!-- Модальное окно Входа / Регистрации -->
+  <!-- Модалка Входа -->
   <div id="authModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="authModalTitle">Вход в аккаунт</h3>
+        <h3 id="authModalTitle">Вход</h3>
         <button class="close-btn" onclick="closeModal('authModal')">&times;</button>
       </div>
       <form onsubmit="handleAuth(event)">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="authEmail" required placeholder="user@example.com">
-        </div>
-        <div class="form-group">
-          <label>Пароль</label>
-          <input type="password" id="authPassword" required placeholder="Минимум 6 символов">
-        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
+        <div class="form-group"><label>Пароль</label><input type="password" id="authPassword" required></div>
         <button type="submit" id="authSubmitBtn" class="btn btn-primary" style="width: 100%;">Войти</button>
       </form>
-      <div style="margin-top: 1rem; text-align: center; font-size: 0.85rem;">
-        <span id="authSwitchText">Нет аккаунта?</span> 
-        <a href="#" id="authSwitchLink" style="color: #818cf8;" onclick="toggleAuthMode(event)">Зарегистрироваться</a>
+      <div style="margin-top: 1rem; text-align: center;">
+        <a href="#" style="color: #818cf8;" onclick="toggleAuthMode(event)" id="authSwitchLink">Нет аккаунта? Зарегистрироваться</a>
       </div>
-      <div id="authStatus" class="status-msg"></div>
     </div>
   </div>
 
-  <!-- Модальное окно добавления объявления -->
+  <!-- Модалка Создания (с загрузкой файла и контактами) -->
   <div id="createPostModal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -372,193 +108,149 @@
         <button class="close-btn" onclick="closeModal('createPostModal')">&times;</button>
       </div>
       <form onsubmit="handleCreatePost(event)">
-        <div class="form-group">
-          <label>Название товара</label>
-          <input type="text" id="postTitle" required placeholder="Например, iPhone 13 128GB">
-        </div>
-        <div class="form-group">
-          <label>Цена (₽)</label>
-          <input type="number" id="postPrice" required placeholder="Например, 45000">
-        </div>
-        <div class="form-group">
-          <label>Ссылка на фото (URL)</label>
-          <input type="url" id="postImage" placeholder="https://example.com/photo.jpg">
-        </div>
-        <div class="form-group">
-          <label>Описание</label>
-          <textarea id="postDesc" rows="3" required placeholder="Опишите состояние и детали..."></textarea>
-        </div>
+        <div class="form-group"><label>Название товара</label><input type="text" id="postTitle" required></div>
+        <div class="form-group"><label>Цена (₽)</label><input type="number" id="postPrice" required></div>
+        <div class="form-group"><label>Фото (выберите файл)</label><input type="file" id="postImageFile" accept="image/*" required></div>
+        <div class="form-group"><label>Описание</label><textarea id="postDesc" rows="2" required></textarea></div>
+        <div class="form-group"><label>Контакты (Телефон, Telegram, WhatsApp)</label><input type="text" id="postContacts" required placeholder="Например: +7 999 000-00-00"></div>
         <button type="submit" id="postSubmitBtn" class="btn btn-primary" style="width: 100%;">Опубликовать</button>
       </form>
-      <div id="postStatus" class="status-msg"></div>
     </div>
   </div>
 
   <script>
-    // 1. Инициализация Firebase с вашими ключами
     const firebaseConfig = {
       apiKey: "AIzaSyBiW1GNyhjJiuEJapEP0Qx06_PrfbmEBTc",
       authDomain: "nicemarket-d77d0.firebaseapp.com",
       projectId: "nicemarket-d77d0",
       storageBucket: "nicemarket-d77d0.firebasestorage.app",
       messagingSenderId: "848367524440",
-      appId: "1:848367524440:web:096d45aaf48a48f75c882d",
-      measurementId: "G-CWB5EQWNZH"
+      appId: "1:848367524440:web:096d45aaf48a48f75c882d"
     };
+
+    // Почта администратора
+    const ADMIN_EMAIL = "Nomer0084@gmail.com"; 
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-
     let currentUser = null;
     let isRegisterMode = false;
 
-    // 2. Отслеживание авторизации
+    // Авторизация
     auth.onAuthStateChanged((user) => {
       currentUser = user;
-      const guestBlock = document.getElementById('authGuest');
-      const userBlock = document.getElementById('authUser');
-      const userBadge = document.getElementById('userEmailBadge');
-
       if (user) {
-        guestBlock.classList.add('hidden');
-        userBlock.classList.remove('hidden');
-        userBadge.textContent = user.email;
+        document.getElementById('authGuest').classList.add('hidden');
+        document.getElementById('authUser').classList.remove('hidden');
+        // Приведение почты к нижнему регистру для точного совпадения
+        let badgeText = user.email;
+        if(user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) badgeText += ' (Админ)';
+        document.getElementById('userEmailBadge').textContent = badgeText;
       } else {
-        guestBlock.classList.remove('hidden');
-        userBlock.classList.add('hidden');
+        document.getElementById('authGuest').classList.remove('hidden');
+        document.getElementById('authUser').classList.add('hidden');
       }
+      loadPosts(); 
     });
 
-    // 3. Авторизация и Регистрация
     async function handleAuth(e) {
       e.preventDefault();
-      const email = document.getElementById('authEmail').value;
-      const pass = document.getElementById('authPassword').value;
-      const status = document.getElementById('authStatus');
-
-      status.textContent = 'Обработка...';
-      status.style.color = '#38bdf8';
-
+      const em = document.getElementById('authEmail').value;
+      const pw = document.getElementById('authPassword').value;
       try {
-        if (isRegisterMode) {
-          await auth.createUserWithEmailAndPassword(email, pass);
-        } else {
-          await auth.signInWithEmailAndPassword(email, pass);
-        }
-        status.textContent = '';
+        if (isRegisterMode) await auth.createUserWithEmailAndPassword(em, pw);
+        else await auth.signInWithEmailAndPassword(em, pw);
         closeModal('authModal');
-      } catch (err) {
-        status.style.color = 'var(--danger)';
-        status.textContent = err.message;
-      }
+      } catch (err) { alert(err.message); }
     }
 
     function toggleAuthMode(e) {
       e.preventDefault();
       isRegisterMode = !isRegisterMode;
-      document.getElementById('authModalTitle').textContent = isRegisterMode ? 'Создать аккаунт' : 'Вход в аккаунт';
+      document.getElementById('authModalTitle').textContent = isRegisterMode ? 'Регистрация' : 'Вход';
       document.getElementById('authSubmitBtn').textContent = isRegisterMode ? 'Зарегистрироваться' : 'Войти';
-      document.getElementById('authSwitchText').textContent = isRegisterMode ? 'Уже есть аккаунт?' : 'Нет аккаунта?';
-      document.getElementById('authSwitchLink').textContent = isRegisterMode ? 'Войти' : 'Зарегистрироваться';
+      document.getElementById('authSwitchLink').textContent = isRegisterMode ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться';
     }
 
-    async function logoutUser() {
-      await auth.signOut();
+    function logoutUser() { auth.signOut(); }
+
+    function getBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
     }
 
-    // 4. Публикация объявлений
     async function handleCreatePost(e) {
       e.preventDefault();
       if (!currentUser) return;
-
-      const title = document.getElementById('postTitle').value;
-      const price = Number(document.getElementById('postPrice').value);
-      let img = document.getElementById('postImage').value;
-      const desc = document.getElementById('postDesc').value;
-      const status = document.getElementById('postStatus');
-
-      if (!img) {
-        img = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop';
+      
+      const fileInput = document.getElementById('postImageFile');
+      let base64Img = '';
+      if(fileInput.files.length > 0) {
+        base64Img = await getBase64(fileInput.files[0]);
       }
-
-      status.textContent = 'Публикация...';
-      status.style.color = '#38bdf8';
 
       try {
         await db.collection('products').add({
-          title: title,
-          price: price,
-          image: img,
-          description: desc,
+          title: document.getElementById('postTitle').value,
+          price: Number(document.getElementById('postPrice').value),
+          image: base64Img,
+          description: document.getElementById('postDesc').value,
+          contacts: document.getElementById('postContacts').value,
           sellerEmail: currentUser.email,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
-        status.textContent = '';
         document.getElementById('createPostModal').querySelector('form').reset();
         closeModal('createPostModal');
-      } catch (err) {
-        status.style.color = 'var(--danger)';
-        status.textContent = err.message;
+      } catch (err) { alert(err.message); }
+    }
+
+    async function deletePost(id) {
+      if(confirm('Точно удалить объявление?')) {
+        await db.collection('products').doc(id).delete();
       }
     }
 
-    // 5. Загрузка товаров из Firestore в реальном времени
-    db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
-      const grid = document.getElementById('itemsGrid');
-      grid.innerHTML = '';
+    function loadPosts() {
+      db.collection('products').orderBy('createdAt', 'desc').onSnapshot((snapshot) => {
+        const grid = document.getElementById('itemsGrid');
+        grid.innerHTML = '';
+        snapshot.forEach((doc) => {
+          const item = doc.data();
+          const id = doc.id;
+          
+          const isAdmin = currentUser && currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+          const isOwner = currentUser && currentUser.email === item.sellerEmail;
+          const showDeleteBtn = isAdmin || isOwner;
+          
+          const contactsText = item.contacts ? `📞 Контакты: ${item.contacts}` : '';
 
-      if (snapshot.empty) {
-        grid.innerHTML = '<div style="color: var(--text-muted); grid-column: 1 / -1;">Пока нет объявлений. Будьте первым!</div>';
-        return;
-      }
-
-      snapshot.forEach((doc) => {
-        const item = doc.data();
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-          <img class="card-img" src="${item.image}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop'">
-          <div class="card-body">
-            <div class="card-price">${item.price ? item.price.toLocaleString('ru-RU') + ' ₽' : 'Договорная'}</div>
-            <div class="card-title">${escapeHtml(item.title)}</div>
-            <div class="card-desc">${escapeHtml(item.description)}</div>
-            <div class="card-footer">
-              <span>👤 ${escapeHtml(item.sellerEmail ? item.sellerEmail.split('@')[0] : 'Продавец')}</span>
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img class="card-img" src="${item.image}" alt="Фото">
+            <div class="card-body">
+              <div class="card-price">${item.price} ₽</div>
+              <div class="card-title">${item.title}</div>
+              <div class="card-desc">${item.description}</div>
+              <div class="card-contacts">${contactsText}</div>
+              <div class="card-footer">
+                <span>👤 ${item.sellerEmail.split('@')[0]}</span>
+                ${showDeleteBtn ? `<button class="btn btn-danger" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="deletePost('${id}')">Удалить</button>` : ''}
+              </div>
             </div>
-          </div>
-        `;
-        grid.appendChild(card);
+          `;
+          grid.appendChild(card);
+        });
       });
-    }, (error) => {
-      document.getElementById('itemsGrid').innerHTML = '<div style="color: var(--danger);">Ошибка при загрузке: ' + error.message + '</div>';
-    });
-
-    // 6. Утилиты интерфейса
-    function openModal(id) {
-      document.getElementById(id).classList.add('active');
     }
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
-
-    function handleHeroBtnClick() {
-      if (currentUser) {
-        openModal('createPostModal');
-      } else {
-        openModal('authModal');
-      }
-    }
-
-    function escapeHtml(string) {
-      if (!string) return '';
-      return String(string)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
   </script>
 </body>
 </html>
